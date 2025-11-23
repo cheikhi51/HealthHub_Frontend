@@ -1,11 +1,17 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-function Login() {
+import { GoEye, GoEyeClosed } from 'react-icons/go';
+import axios from 'axios';
+function Login({setAuthToken}) {
     const [formData, setFormData] = useState({
         email: '',
-        password: ''
+        motDePasse: ''
     });
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleShowPassword = () => {
+        setShowPassword(!showPassword);
+    }
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -15,12 +21,32 @@ function Login() {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle login logic here
-        console.log('Login attempt:', formData);
-        // For demo purposes, redirect to home after "login"
-        navigate('/');
+        try {
+            const response = await axios.post('http://localhost:8080/api/auth/login', formData);
+            localStorage.setItem('jwtToken', response.data.token);
+            setAuthToken(response.data.token);
+            const role = response.data.role;
+            localStorage.setItem('userRole', role);
+            switch(role) {
+                case 'PATIENT':
+                    navigate('/DashboardPatient');
+                    break;
+                case 'MEDCIN':
+                    navigate('/DashboardMedecin');
+                    break;
+                case 'ADMIN':
+                    navigate('/DashboardAdmin');
+                    break;
+                default: navigate('/');
+            }
+        }
+        catch (error) {
+            console.error('Informations incorrectes: ', error);
+        }
+    
     };
 
     return (
@@ -38,29 +64,46 @@ function Login() {
 
                     <form className="login-form" onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label htmlFor="email">Email Address</label>
+                            <label htmlFor="email">Adresse Email</label>
                             <input
                                 type="email"
                                 id="email"
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                placeholder="Enter your email"
+                                placeholder="Enterer votre email"
                                 required
                             />
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="password">Password</label>
+                            <label htmlFor="motDePasse">Mot de passe</label>
                             <input
-                                type="password"
-                                id="password"
-                                name="password"
-                                value={formData.password}
+                                type={showPassword ? "text" : "password"}
+                                id="motDePasse"
+                                name="motDePasse"
+                                value={formData.motDePasse}
                                 onChange={handleChange}
-                                placeholder="Enter your password"
+                                placeholder="Enterer votre mot de passe"
                                 required
                             />
+                            <button type="button"
+                            onClick={handleShowPassword}
+                            style={{
+                                position: "absolute",
+                                right: "10px",
+                                top: "50%",
+                                transform: "translateY(5px)",
+                                background: "none",
+                                border: "none",
+                                cursor: "pointer"
+                                }}>
+                            {showPassword ?
+                                (<span style={{color:"black"}}><GoEye/></span>)
+                                :
+                                (<span style={{color:"black"}}><GoEyeClosed /></span>)
+                            }
+                            </button>
                         </div>
 
                         <div className="form-options">
@@ -112,15 +155,15 @@ function Login() {
                         <p>Accédez à vos dossiers médicaux, prenez des rendez-vous et connectez-vous avec des professionnels de santé en toute simplicité avec HealthHub.</p>
                         <div className="brand-features">
                             <div className="feature">
-                                <span className="feature-icon">⚕️</span>
+                                <span className="feature-icon-circle">⚕️</span>
                                 <span>Dossiers Médicaux</span>
                             </div>
                             <div className="feature">
-                                <span className="feature-icon">📅</span>
+                                <span className="feature-icon-circle">📅</span>
                                 <span>Prise de Rendez-vous</span>
                             </div>
                             <div className="feature">
-                                <span className="feature-icon">👨‍⚕️</span>
+                                <span className="feature-icon-circle">👨‍⚕️</span>
                                 <span>Consultations Médicales</span>
                             </div>
                         </div>

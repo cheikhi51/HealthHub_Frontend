@@ -540,6 +540,9 @@ body {
     border-color: var(--primary-green-light);
     background: var(--white);
 }
+.feature-card:hover .feature-icon{
+  color: var(--primary-green);
+}
 
 .feature-icon {
     font-size: 3rem;
@@ -1621,7 +1624,7 @@ body {
   font-size: 0.9rem;
 }
 
-.feature-icon {
+.feature-icon-circle {
   width: 28px;
   height: 28px;
   border-radius: 999px;
