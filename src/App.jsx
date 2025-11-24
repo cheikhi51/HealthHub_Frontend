@@ -9,6 +9,7 @@ import DashboardMedecin from './Components/DashboardMedecin';
 import DashboardPatient from './Components/DashboardPatient';
 import Login from './Components/Login';
 import Signup from './Components/Signup';
+import NoPage from './Components/NoPage';
 import './App.css';
 
 function App() {
@@ -97,6 +98,8 @@ function App() {
               )
             }
           />
+          
+          <Route path="*" element={<NoPage />} />
           
         </Routes>
         </BrowserRouter>  

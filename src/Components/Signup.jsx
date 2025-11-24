@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-function Signup() {
+function Signup({setAuthToken}) {
     const [formData, setFormData] = useState({
         nom: '',
         prenom: '',
@@ -20,12 +20,16 @@ function Signup() {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
         // Handle signup logic here
-        console.log('Signup attempt:', formData);
-        // For demo purposes, redirect to home after "signup"
-        navigate('/');
+        try{
+            const response = await fetch('http://localhost:5000/api/auth/register', {formData});
+            console.log('Données du formulaire soumises:', formData);
+
+        }catch(error){
+            console.error('Erreur lors de l\'inscription:', error);
+        }
     };
 
     return (
