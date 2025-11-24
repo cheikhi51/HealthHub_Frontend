@@ -11,6 +11,7 @@
     --light-blue: #14ECDB;
     --light-green: #7bfd95;
     --light-yellow: #D1FF5D;
+    --neutral-red:#f03636;
 }
 html{
     background-color: black;
@@ -2072,3 +2073,329 @@ body {
   }
 }
 
+/* ====== Logout Page Styles ====== */
+
+.logout-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.logout-card {
+  background: var(--white);
+  padding: 3rem 2.5rem;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  max-width: 450px;
+  width: 90%;
+  animation: slideInScale 0.4s ease-out;
+  border: 2px solid rgba(0, 168, 107, 0.1);
+}
+
+@keyframes slideInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.logout-icon {
+  font-size: 4rem;
+  color: red;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+.logout-card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--neutral-dark);
+  margin-bottom: 2rem;
+  line-height: 1.4;
+}
+
+.logout-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.logout-button{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-color: transparent;
+  border: none;
+  font-size: x-large;
+  padding: 4px;
+  cursor: pointer;
+}
+.logout-button:hover{
+  background-color: var(--neutral-bg);
+  color: var(--neutral-dark);
+  border: 1px solid var(--neutral-red);
+  border-radius: 20px;
+  
+}
+.btn-logout,
+.btn-cancel {
+  padding: 12px 32px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  min-width: 140px;
+}
+
+.btn-logout {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
+  color: white;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.btn-logout:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.9), rgba(185, 28, 28, 0.9));
+}
+
+.btn-cancel {
+  background: transparent;
+  color: var(--neutral-medium);
+  border: 2px solid var(--neutral-medium);
+}
+
+.btn-cancel:hover {
+  background: var(--neutral-medium);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(39, 40, 40, 0.3);
+}
+
+.btn-logout:active,
+.btn-cancel:active {
+  transform: translateY(0);
+}
+
+/* ====== 404 Error Page Styles ====== */
+
+.no-page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: radial-gradient(circle at top left, #e9fdf7, #f5f8ff);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background animation effect */
+.no-page-container::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0, 255, 179, 0.1), transparent);
+  border-radius: 50%;
+  top: -250px;
+  right: -250px;
+  animation: float 6s ease-in-out infinite;
+}
+
+.no-page-container::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(114, 234, 2, 0.1), transparent);
+  border-radius: 50%;
+  bottom: -200px;
+  left: -200px;
+  animation: float 8s ease-in-out infinite reverse;
+}
+
+.error-code {
+  font-size: 10rem;
+  font-weight: 900;
+  margin: 0;
+  background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light), var(--light-green));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+  animation: glitch 3s ease-in-out infinite;
+}
+
+@keyframes glitch {
+  0%, 100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+}
+
+.error-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--neutral-dark);
+  margin: 1rem 0 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.error-message-no-page {
+  font-size: 1.2rem;
+  color: var(--neutral-medium);
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+}
+
+.return-home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 36px;
+  background: linear-gradient(135deg, rgba(114, 234, 2, 0.853), rgba(0, 255, 179, 0.853));
+  color: white;
+  text-decoration: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 255, 98, 0.3);
+  position: relative;
+  z-index: 1;
+}
+
+.return-home-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 255, 98, 0.4);
+}
+
+.return-home-btn:active {
+  transform: translateY(-1px);
+}
+
+/* Optional: Add an icon before text */
+.return-home-btn::before {
+  content: '←';
+  font-size: 1.3rem;
+  transition: transform 0.3s ease;
+}
+
+.return-home-btn:hover::before {
+  transform: translateX(-4px);
+}
+
+/* ====== Responsive Styles ====== */
+
+@media (max-width: 768px) {
+  .logout-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .logout-card h2 {
+    font-size: 1.3rem;
+  }
+
+  .logout-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-logout,
+  .btn-cancel {
+    width: 100%;
+  }
+
+  .error-code {
+    font-size: 7rem;
+  }
+
+  .error-title {
+    font-size: 2rem;
+  }
+
+  .error-message-no-page {
+    font-size: 1.1rem;
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logout-icon {
+    font-size: 3rem;
+  }
+
+  .error-code {
+    font-size: 5rem;
+  }
+
+  .error-title {
+    font-size: 1.6rem;
+  }
+
+  .error-message-no-page {
+    font-size: 1rem;
+  }
+
+  .return-home-btn {
+    padding: 12px 28px;
+    font-size: 1rem;
+  }
+}

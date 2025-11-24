@@ -9,7 +9,7 @@ function DashboardPatient({setAuthToken}) {
         <Logout setAuthToken={setAuthToken} setShowLogout={setShowLogout} />
       }
       <h1>Bienvenue sur le tableau de bord du patient</h1>
-      <button className="header-button" onClick={() => setShowLogout(true)}><TbLogout color='red' /></button>
+      <button className="logout-button" onClick={() => setShowLogout(true)}><TbLogout color='red' /></button>
     </div>
   );
 }

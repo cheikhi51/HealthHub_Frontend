@@ -9,7 +9,7 @@ function DashboardAdmin({ setAuthToken }) {
         <Logout setAuthToken={setAuthToken} setShowLogout={setShowLogout} />
       }
       <h1>Bienvenue sur le tableau de bord de l'administrateur</h1>
-      <button className="header-button" onClick={() => setShowLogout(true)}><TbLogout color='red' /></button>
+      <button className="logout-button" onClick={() => setShowLogout(true)}><TbLogout color='red' /></button>
     </div>
   );
 }
