@@ -417,7 +417,7 @@ body {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 960px) {
     .nav-menu {
     font-size: 20px;
     position: fixed;
@@ -972,6 +972,7 @@ body {
 
 .form-group {
     margin-bottom: 1.5rem;
+    position: relative;
 }
 
 .form-group label {
@@ -1011,6 +1012,17 @@ body {
 .form-group textarea {
     resize: vertical;
     min-height: 120px;
+}
+
+.show-password {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    font-size: 1rem;
+    user-select: none;
 }
 
 .submit-button {

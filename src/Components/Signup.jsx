@@ -49,7 +49,7 @@ function Signup() {
                 <div className="signup-form-section">
                     <div className="signup-header">
                         <Link to="/" className="back-home">
-                            ← Back to Home
+                            ← Retour à l'accueil
                         </Link>
                         <h1>Bienvenue sur HealthHub</h1>
                         <p>Créez votre compte et prenez le contrôle de votre parcours de santé</p>
@@ -77,7 +77,7 @@ function Signup() {
                                     name="prenom"
                                     value={formData.prenom}
                                     onChange={handleChange}
-                                    placeholder="Enterer votre prénom "
+                                    placeholder="Entrer votre prénom "
                                     required
                                 />
                             </div>
@@ -92,7 +92,7 @@ function Signup() {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                placeholder="Enterer votre email"
+                                placeholder="Entrer votre email"
                                 required
                             />
                         </div>
@@ -104,7 +104,7 @@ function Signup() {
                                     name="telephone"
                                     value={formData.telephone}
                                     onChange={handleChange}
-                                    placeholder="+212 (5) 000-0000"
+                                    placeholder="+212 (6) 000-0000"
                                 />
                             </div>
                             </div>
@@ -134,15 +134,7 @@ function Signup() {
                             />
                             <button type="button"
                             onClick={handleShowPassword}
-                            style={{
-                                position: "absolute",
-                                right: "10px",
-                                top: "50%",
-                                transform: "translateY(-50%)",
-                                background: "none",
-                                border: "none",
-                                cursor: "pointer"
-                                }}>
+                            className='show-password'>
                             {showPassword ?
                                 (<span style={{color:"black"}}><GoEye/></span>)
                                 :

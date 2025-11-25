@@ -56,10 +56,10 @@ function Login({setAuthToken}) {
                 <div className="login-form-section">
                     <div className="login-header">
                         <Link to="/" className="back-home">
-                            ← Back to Home
+                            ← Retour à l'accueil
                         </Link>
-                        <h1>Welcome Back</h1>
-                        <p>Sign in to your HealthHub account</p>
+                        <h1>Bienvenue</h1>
+                        <p>Connectez-vous à votre compte HealthHub</p>
                     </div>
 
                     <form className="login-form" onSubmit={handleSubmit}>
@@ -71,7 +71,7 @@ function Login({setAuthToken}) {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                placeholder="Enterer votre email"
+                                placeholder="Entrer votre email"
                                 required
                             />
                         </div>
@@ -84,20 +84,12 @@ function Login({setAuthToken}) {
                                 name="motDePasse"
                                 value={formData.motDePasse}
                                 onChange={handleChange}
-                                placeholder="Enterer votre mot de passe"
+                                placeholder="Entrer votre mot de passe"
                                 required
                             />
                             <button type="button"
                             onClick={handleShowPassword}
-                            style={{
-                                position: "absolute",
-                                right: "10px",
-                                top: "50%",
-                                transform: "translateY(5px)",
-                                background: "none",
-                                border: "none",
-                                cursor: "pointer"
-                                }}>
+                            className='show-password'>
                             {showPassword ?
                                 (<span style={{color:"black"}}><GoEye/></span>)
                                 :
