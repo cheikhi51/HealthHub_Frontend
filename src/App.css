@@ -2412,3 +2412,696 @@ body {
     font-size: 1rem;
   }
 }
+
+/* ===== Dashboard Admin Layout ===== */
+
+.dashboard-admin {
+  min-height: 100vh;
+  padding: 32px 32px 40px;
+  background: radial-gradient(circle at top left, #e9fdf7, #f5f8ff);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  position: relative;
+}
+
+/* Titre de bienvenue */
+.dashboard-admin h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, var(--primary-green), var(--primary-green-light), var(--light-green));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===== Boutons en haut à droite (Settings + Logout) ===== */
+
+.dashboard-admin .header-button,
+.dashboard-admin > .logout-button {
+  position: absolute;
+  top: 24px;
+  border-radius: 999px;
+  border: none;
+  padding: 8px 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+  transition: all 0.25s ease;
+}
+
+/* Bouton settings (ouvre la sidebar) */
+.dashboard-admin .header-button {
+  right: 80px;
+  border: 1px solid rgba(22, 163, 74, 0.3);
+  color: var(--primary-green-dark);
+}
+
+.dashboard-admin .header-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(34, 197, 94, 0.35);
+  background: linear-gradient(135deg, rgba(114, 234, 2, 0.08), rgba(0, 255, 179, 0.12));
+}
+
+/* Bouton logout (icône rouge) */
+.dashboard-admin > .logout-button {
+  right: 24px;
+  color: var(--neutral-red);
+  border: 1px solid rgba(240, 54, 54, 0.25);
+}
+
+.dashboard-admin > .logout-button:hover {
+  transform: translateY(-1px);
+  background: rgba(240, 54, 54, 0.08);
+  box-shadow: 0 10px 26px rgba(239, 68, 68, 0.3);
+}
+
+/* On annule le background global que tu avais sur .logout-button pour l'overlay */
+.logout-overlay .logout-button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-color: transparent;
+  border: none;
+  font-size: x-large;
+  padding: 4px;
+  cursor: pointer;
+}
+
+/* ===== Contenu principal du dashboard ===== */
+
+.dashboard-content {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Si tu ne veux pas ajouter de div.dashboard-content en JSX,
+   ce padding appliquera quand même une marge au contenu dynamique */
+.dashboard-admin > *:not(h1):not(.header-button):not(.logout-button):not(.logout-overlay) {
+  margin-top: 8px;
+}
+
+/* ===== Message d’erreur ===== */
+
+.admin-dashboard-error {
+  background: #fef2f2;
+  border-left: 4px solid var(--neutral-red);
+  color: #b91c1c;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  box-shadow: 0 6px 18px rgba(248, 113, 113, 0.25);
+}
+
+/* ===== Vue d’accueil du dashboard (cartes de stats) ===== */
+/* À utiliser dans ton "default" de renderContent() */
+
+.stats-overview {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.stats-overview-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--neutral-dark);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 18px;
+}
+
+.stat-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 18px 18px 16px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(0, 168, 107, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Petite barre verte en haut */
+
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--neutral-medium);
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--neutral-dark);
+}
+
+.stat-tag {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  align-self: flex-start;
+  background: var(--primary-green-pale);
+  color: var(--primary-green-dark);
+}
+
+/* Variantes (tu peux les utiliser selon le type de stats) */
+.stat-card.warning .stat-tag {
+  background: #fef9c3;
+  color: #92400e;
+}
+
+.stat-card.danger .stat-tag {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width: 768px) {
+  .dashboard-admin {
+    padding: 80px 16px 24px;
+  }
+
+  .dashboard-admin h1 {
+    font-size: 1.6rem;
+  }
+
+  .dashboard-admin .header-button {
+    top: 16px;
+    right: 64px;
+    padding: 6px 10px;
+  }
+
+  .dashboard-admin > .logout-button {
+    top: 16px;
+    right: 16px;
+    padding: 6px 10px;
+  }
+}
+/* ===== SECTION GLOBALE ===== */
+
+.user-management-section {
+  margin-top: 16px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px 24px 28px;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.12);
+  border: 1px solid rgba(0, 168, 107, 0.12);
+}
+
+/* En-tête section */
+.user-management-section .section-header {
+  margin-bottom: 18px;
+}
+
+.user-management-section {
+  /* tu as déjà une .section-title globale, on garde le style gradient */
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+.section-subtitle {
+  font-size: 0.95rem;
+  color: var(--neutral-medium);
+}
+
+/* ===== BARRE DE RECHERCHE ===== */
+
+.user-search-container {
+  margin: 14px 0 18px;
+}
+
+.search-container {
+  max-width: 380px;
+  width: 100%;
+  background: var(--neutral-bg);
+  border-radius: 999px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+}
+
+.search-icon {
+  font-size: 1.2rem;
+  color: var(--primary-green-dark);
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 0.95rem;
+  color: var(--neutral-dark);
+}
+
+.search-input::placeholder {
+  color: #9ca3af;
+}
+
+/* ===== TABLE UTILISATEURS ===== */
+
+.table-container {
+  margin-top: 8px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: #ffffff;
+}
+
+/* Table */
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.user-table thead {
+  background: linear-gradient(135deg, rgba(114, 234, 2, 0.12), rgba(0, 255, 179, 0.15));
+}
+
+.user-table th,
+.user-table td {
+  padding: 12px 14px;
+  text-align: left;
+}
+
+.user-table th {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--neutral-dark);
+  border-bottom: 1px solid rgba(209, 213, 219, 0.8);
+}
+
+.user-table tbody tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+.user-table tbody tr:hover {
+  background: #ecfdf5;
+}
+
+/* Inputs d’édition dans la table */
+.edit-input {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  font-size: 0.9rem;
+  background: var(--neutral-bg);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.edit-input:focus {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+  background: #ffffff;
+}
+
+/* ===== BADGES RÔLES ===== */
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.role-admin {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.role-medecin {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.role-patient {
+  background: #ecfdf5;
+  color: #15803d;
+}
+
+/* ===== BOUTONS D’ACTION ===== */
+
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ubtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #f9fafb;
+}
+
+.ubtn svg {
+  font-size: 0.95rem;
+}
+
+/* Modifier */
+.btn-edit {
+  color: #0f766e;
+  background: #ecfeff;
+  border: 1px solid #99f6e4;
+}
+.btn-edit:hover {
+  background: #ccfbf1;
+  transform: translateY(-1px);
+}
+
+/* Supprimer */
+.btn-delete {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+.btn-delete:hover {
+  background: #fee2e2;
+  transform: translateY(-1px);
+}
+
+/* Sauvegarder */
+.btn-save {
+  color: #166534;
+  background: #dcfce7;
+  border: 1px solid #86efac;
+}
+.btn-save:hover {
+  background: #bbf7d0;
+  transform: translateY(-1px);
+}
+
+/* Annuler */
+.btn-annuler {
+  color: #4b5563;
+  background: #e5e7eb;
+  border: 1px solid #d1d5db;
+}
+.btn-annuler:hover {
+  background: #d1d5db;
+  transform: translateY(-1px);
+}
+
+/* ===== PAGINATION ===== */
+
+.user-management-section .pagination {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.user-management-section .pagination button {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: none;
+  background: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 5px 16px rgba(15, 23, 42, 0.12);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.user-management-section .pagination button:disabled {
+  opacity: 0.4;
+  cursor: default;
+  box-shadow: none;
+}
+
+.user-management-section .pagination button:not(:disabled):hover {
+  transform: translateY(-1px);
+  background: var(--neutral-bg);
+}
+
+/* ===== FORMULAIRE AJOUT UTILISATEUR ===== */
+
+.add-user-section {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px dashed rgba(148, 163, 184, 0.7);
+}
+
+.add-user-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--neutral-dark);
+  margin-bottom: 14px;
+}
+
+/* Grille du formulaire */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px 18px;
+}
+
+/* On spécialise les form-group de cette section
+   pour ne pas casser les autres formulaires de l’app */
+.user-management-section .form-group {
+  margin-bottom: 0;
+}
+
+.user-management-section .form-lebel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #003f82;
+}
+
+/* Inputs / selects */
+.user-management-section .form-input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: var(--neutral-bg);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.user-management-section .form-input:focus {
+  border-color: var(--primary-green);
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.18);
+}
+
+/* Bouton créer utilisateur */
+.btn-create {
+  margin-top: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, rgba(114, 234, 2, 0.9), rgba(0, 255, 179, 0.9));
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 10px 26px rgba(34, 197, 94, 0.35);
+  transition: all 0.25s ease;
+}
+
+.btn-create:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 32px rgba(34, 197, 94, 0.45);
+}
+
+.btn-create:active {
+  transform: translateY(1px);
+  box-shadow: 0 6px 18px rgba(34, 197, 94, 0.3);
+}
+
+/* ===== Animation légère des lignes ===== */
+
+.fade-in {
+  animation: fadeIn 0.35s ease-in-out;
+}
+
+/* Tu as déjà une @keyframes fadeIn, sinon décommente:
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+*/
+
+/* ===== Responsive ===== */
+
+@media (max-width: 768px) {
+  .user-management-section {
+    padding: 18px 14px 22px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  .user-table {
+    min-width: 650px;
+  }
+
+  .user-management-section .pagination {
+    justify-content: center;
+  }
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+}
+
+.stat-card-cyan {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+}
+
+.stat-card-blue {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.stat-card-violet {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.stat-card-indigo {
+  background: linear-gradient(135deg, #43e761, #2dc31d);
+}
+
+.stat-card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+}
+
+.stat-card-content {
+  position: relative;
+  z-index: 10;
+}
+
+.stat-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.stat-icon {
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+}
+
+.stat-icon svg {
+  width: 24px;
+  height: 24px;
+  color: white;
+}
+
+.stat-change {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 20px;
+}
+
+.stat-change-positive {
+  background: rgba(6, 182, 212, 0.2);
+  color: #0e7490;
+}
+
+.stat-change-negative {
+  background: rgba(139, 92, 246, 0.2);
+  color: #6d28d9;
+}
+
+.stat-title {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.stat-value {
+  font-size: 1.875rem;
+  font-weight: bold;
+  color: white;
+  margin: 8px 0 0 0;
+}
+
+.stat-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: transform 1s ease;
+}
+
+.stat-card:hover .stat-shine {
+  transform: translateX(200%);
+}
