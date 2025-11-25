@@ -94,7 +94,7 @@ function App() {
               authToken ? (
                 <Navigate to={getRedirectPathByRole()} replace />
               ) : (
-                <Signup setAuthToken={setAuthToken} />
+                <Signup />
               )
             }
           />

@@ -1,6 +1,13 @@
 import { useState } from 'react';
+import { GoEye, GoEyeClosed } from 'react-icons/go';
 import { Link, useNavigate } from 'react-router-dom';
-function Signup({setAuthToken}) {
+import axios from 'axios';
+function Signup() {
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleShowPassword = () => {
+        setShowPassword(!showPassword);
+    }
     const [formData, setFormData] = useState({
         nom: '',
         prenom: '',
@@ -12,6 +19,7 @@ function Signup({setAuthToken}) {
     });
     const navigate = useNavigate();
 
+
     const handleChange = (e) => {
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
         setFormData({
@@ -22,10 +30,12 @@ function Signup({setAuthToken}) {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-        // Handle signup logic here
         try{
-            const response = await fetch('http://localhost:5000/api/auth/register', {formData});
+            const response = await axios.post('http://localhost:8080/api/auth/register', formData);
             console.log('Données du formulaire soumises:', formData);
+
+            
+            navigate('/login');
 
         }catch(error){
             console.error('Erreur lors de l\'inscription:', error);
@@ -72,6 +82,7 @@ function Signup({setAuthToken}) {
                                 />
                             </div>
                         </div>
+                        <div className="form-row">
 
                         <div className="form-group">
                             <label htmlFor="email">Email</label>
@@ -85,8 +96,6 @@ function Signup({setAuthToken}) {
                                 required
                             />
                         </div>
-
-                        <div className="form-row">
                             <div className="form-group">
                                 <label htmlFor="telephone">Numéro de téléphone</label>
                                 <input
@@ -98,6 +107,8 @@ function Signup({setAuthToken}) {
                                     placeholder="+212 (5) 000-0000"
                                 />
                             </div>
+                            </div>
+                            <div className="form-row">
                             <div className="form-group">
                                 <label htmlFor="dateNaissance">Date de naissance</label>
                                 <input
@@ -108,12 +119,12 @@ function Signup({setAuthToken}) {
                                     onChange={handleChange}
                                 />
                             </div>
-                        </div>
+                        
 
                         <div className="form-group">
                             <label htmlFor="motDePasse">Mot de passe</label>
                             <input
-                                type="motDePasse"
+                                type={showPassword ? "text" : "password"}
                                 id="motDePasse"
                                 name="motDePasse"
                                 value={formData.motDePasse}
@@ -121,9 +132,34 @@ function Signup({setAuthToken}) {
                                 placeholder="Créer un mot de passe"
                                 required
                             />
+                            <button type="button"
+                            onClick={handleShowPassword}
+                            style={{
+                                position: "absolute",
+                                right: "10px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                                background: "none",
+                                border: "none",
+                                cursor: "pointer"
+                                }}>
+                            {showPassword ?
+                                (<span style={{color:"black"}}><GoEye/></span>)
+                                :
+                                (<span style={{color:"black"}}><GoEyeClosed /></span>)
+                            }
+                            </button>
                            
                         </div>
-
+                        </div>
+                        <div className='form-group'>
+                            <label htmlFor='role'>Je suis un(e) :</label>
+                            <select name="role" id="role" value={formData.role} onChange={handleChange} required>
+                                <option value="" disabled>-- Sélectionnez votre rôle --</option>
+                                <option value="PATIENT">Patient</option>
+                                <option value="MEDCIN">Médecin</option>
+                            </select>
+                        </div>
                         <button type="submit" className="signup-submit-btn">
                             Créer Votre Compte
                         </button>
