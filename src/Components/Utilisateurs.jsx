@@ -9,7 +9,7 @@ import { TbPlayerTrackPrevFilled } from "react-icons/tb";
 function Utilisateurs({ getAuthHeaders, fetchStats }) {
   const [users, setUsers] = useState([]);
   const [editingUser, setEditingUser] = useState(null);
-  const [newUser, setNewUser] = useState({ nom: "", email: "", mot_de_passe: "", role: "" });
+  const [newUser, setNewUser] = useState({ nom: "", prenom: "", telephone: "", email: "", mot_de_passe: "", role: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchName, setSearchName] = useState("");
@@ -139,7 +139,9 @@ function Utilisateurs({ getAuthHeaders, fetchStats }) {
             <tr>
               <th>ID</th>
               <th>Nom</th>
+              <th>Prénom</th>
               <th>Email</th>
+              <th>Téléphone</th>
               <th>Rôle</th>
               <th>Actions</th>
             </tr>
@@ -162,12 +164,33 @@ function Utilisateurs({ getAuthHeaders, fetchStats }) {
                   {editingUser?.id === user.id ? (
                     <input
                       className="edit-input"
+                      value={editingUser.prenom}
+                      onChange={e => setEditingUser({ ...editingUser, prenom: e.target.value })}
+                      placeholder="Prénom complet"
+                    />
+                  ) : user.prenom}
+                </td>
+
+                <td>
+                  {editingUser?.id === user.id ? (
+                    <input
+                      className="edit-input"
                       type="email"
                       value={editingUser.email}
                       onChange={e => setEditingUser({ ...editingUser, email: e.target.value })}
                       placeholder="Email"
                     />
                   ) : user.email}
+                </td>
+                <td>
+                  {editingUser?.id === user.id ? (
+                    <input
+                      className="edit-input"
+                      value={editingUser.telephone}
+                      onChange={e => setEditingUser({ ...editingUser, telephone: e.target.value })}
+                      placeholder="Téléphone"
+                    />
+                  ) : user.telephone}
                 </td>
                 <td>
                   {editingUser?.id === user.id ? (
@@ -244,7 +267,7 @@ function Utilisateurs({ getAuthHeaders, fetchStats }) {
         <h3 className="add-user-title">Ajouter un nouvel utilisateur</h3>
         <div className="form-grid">
           <div className="form-group">
-            <label className="form-lebel" style={{ color: "#003f82" }}>Nom complet</label>
+            <label className="form-lebel" style={{ color: "#003f82" }}>Nom </label>
             <input
               type="text"
               className="form-input"
@@ -253,12 +276,33 @@ function Utilisateurs({ getAuthHeaders, fetchStats }) {
               onChange={e => setNewUser({ ...newUser, nom: e.target.value })}
             />
           </div>
+          
           <div className="form-group">
-            <label className="form-lebel" style={{ color: "#003f82" }}>Adresse Email</label>
+            <label className="form-lebel" style={{ color: "#003f82" }}>Prénom </label>
+            <input
+              type="text"
+              className="form-input"
+              placeholder="Entrez le prénom complet"
+              value={newUser.prenom}
+              onChange={e => setNewUser({ ...newUser, prenom: e.target.value })}
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-lebel" style={{ color: "#003f82" }}>Téléphone </label>
+            <input
+              type="phone"
+              className="form-input"
+              placeholder="Entrez le numéro de téléphone"
+              value={newUser.telephone}
+              onChange={e => setNewUser({ ...newUser, telephone: e.target.value })}
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-lebel" style={{ color: "#003f82" }}>Email</label>
             <input
               type="email"
               className="form-input"
-              placeholder="utilisateur@example.com"
+              placeholder="Entrez l'email"
               value={newUser.email}
               onChange={e => setNewUser({ ...newUser, email: e.target.value })}
             />

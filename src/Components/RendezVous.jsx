@@ -1,50 +1,53 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { IoSearchSharp } from "react-icons/io5";
-import { MdPublishedWithChanges, MdDelete, MdCancel, MdCreateNewFolder } from "react-icons/md";
-import { FaRegCheckCircle } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 import { TbPlayerTrackNextFilled } from "react-icons/tb";
 import { TbPlayerTrackPrevFilled } from "react-icons/tb";
 
 function RendezVous({ getAuthHeaders, fetchStats }) {
   const [rendezVous, setRendezVous] = useState([]);
-  const [editingRendezVous, setEditingRendezVous] = useState(null);
-  const [newRendezVous, setNewRendezVous] = useState({ nom: "", email: "", mot_de_passe: "", role: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchName, setSearchName] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [editingId, setEditingId] = useState(null);
   const itemsPerPage = 4;
 
   // Filtrage avant pagination
-  const filteredUsers = users.filter(user => {
+  const filteredRendezVous = rendezVous.filter(rd => {
     const query = searchName.toLowerCase();
     return (
-      user.nom.toLowerCase().includes(query) ||
-      user.email.toLowerCase().includes(query) ||
-      user.role.toLowerCase().includes(query)
+      rd.dateDebut.toLowerCase().includes(query) ||
+      rd.dateFin.toLowerCase().includes(query) ||
+      rd.motif.toLowerCase().includes(query) ||
+      rd.statut.toLowerCase().includes(query) ||
+      rd.patient.nom.toLowerCase().includes(query) ||
+      rd.patient.prenom.toLowerCase().includes(query) ||
+      rd.medecin.nom.toLowerCase().includes(query) ||
+      rd.medecin.prenom.toLowerCase().includes(query)
     );
   });
 
   // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentUsers = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const currentRendezVous = filteredRendezVous.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredRendezVous.length / itemsPerPage);
 
   useEffect(() => {
-    fetchUsers();
+    fetchRendezVous();
   }, []);
 
-  const fetchUsers = async () => {
+  const fetchRendezVous = async () => {
     setLoading(true);
     setError(null);
     try {
       const headers = getAuthHeaders();
-      const usersRes = await axios.get("http://localhost:8080/api/utilisateurs", { headers });
-      setUsers(usersRes.data);
+      const rendezVousRes = await axios.get("http://localhost:8080/api/administrateurs/rendez-vous", { headers });
+      setRendezVous(rendezVousRes.data);
     } catch (err) {
-      console.error("Erreur lors du chargement des utilisateurs:", err);
+      console.error("Erreur lors du chargement des rendez vous : ", err);
       setError(`Erreur: ${err.response?.data?.message || err.message}`);
       if (err.response?.status === 401 || err.response?.status === 403) {
         localStorage.removeItem("jwtToken");
@@ -59,55 +62,78 @@ function RendezVous({ getAuthHeaders, fetchStats }) {
   const handleDelete = async (id) => {
     try {
       const headers = getAuthHeaders();
-      await axios.delete(`http://localhost:8080/api/utilisateurs/${id}`, { headers });
-      fetchUsers();
+      await axios.delete(`http://localhost:8080/api/administrateurs/rendez-vous/${id}`, { headers });
+      fetchRendezVous();
       fetchStats();
     } catch (err) {
-      console.error("Error deleting user:", err);
+      console.error("Error deleting rendez-vous :", err);
       setError(`Erreur lors de la suppression: ${err.response?.data?.message || err.message}`);
     }
   };
 
-  const handleUpdate = async () => {
+  const handleStatusChange = async (id, newStatus) => {
     try {
       const headers = getAuthHeaders();
-      await axios.put(`http://localhost:8080/api/utilisateurs/${editingUser.id}`, editingUser, { headers });
-      setEditingUser(null);
-      fetchUsers();
+      await axios.put(`http://localhost:8080/api/administrateurs/rendez-vous/${id}/statut`, 
+        { statut: newStatus }, 
+        { headers }
+      );
+      fetchRendezVous();
       fetchStats();
+      setEditingId(null);
     } catch (err) {
-      console.error("Error updating user:", err);
-      setError(`Erreur lors de la mise à jour: ${err.response?.data?.message || err.message}`);
+      console.error("Erreur lors de la mise à jour du statut :", err);
+      setError(`Erreur: ${err.response?.data?.message || err.message}`);
     }
   };
 
-  const handleCreate = async () => {
-    try {
-      const headers = getAuthHeaders();
-      await axios.post("http://localhost:8080/api/utilisateurs", newUser, { headers });
-      setNewUser({ nom: "", email: "", mot_de_passe: "", role: "" });
-      fetchUsers();
-      fetchStats();
-    } catch (err) {
-      console.error("Error creating user:", err);
-      setError(`Erreur lors de la création: ${err.response?.data?.message || err.message}`);
-    }
+  const getStatusLabel = (status) => {
+    const statusMap = {
+      'EN_ATTENTE': 'En attente',
+      'CONFIRME': 'Confirmé',
+      'TERMINE': 'Terminé',
+      'ANNULE': 'Annulé',
+      'REFUSE': 'Refusé'
+    };
+    return statusMap[status] || status;
+  };
+
+  const getStatusClass = (status) => {
+    const statusMap = {
+      'EN_ATTENTE': 'waiting',
+      'CONFIRME': 'confirmed',
+      'TERMINE': 'completed',
+      'ANNULE': 'cancelled',
+      'REFUSE': 'refused'
+    };
+    return statusMap[status] || 'default';
+  };
+
+  const getStatusIcon = (status) => {
+    const iconMap = {
+      'EN_ATTENTE': '⏳',
+      'CONFIRME': '✅',
+      'TERMINE': '🎯',
+      'ANNULE': '❌',
+      'REFUSE': '🚫'
+    };
+    return iconMap[status] || '📄';
   };
 
   const handleSearch = (e) => {
     setSearchName(e.target.value);
-    setCurrentPage(1); // Réinitialiser à la page 1 après une recherche
+    setCurrentPage(1);
   };
 
   if (loading) {
-    return <div className="loading-container">Chargement des utilisateurs...</div>;
+    return <div className="loading-container">Chargement des rendez vous...</div>;
   }
 
   return (
     <div className="user-management-section">
       <div className="section-header">
-        <h2 className="section-title">Gestion des Utilisateurs</h2>
-        <p className="section-subtitle">Gérez facilement tous vos utilisateurs système</p>
+        <h2 className="section-title">Gestion des Rendez Vous</h2>
+        <p className="section-subtitle">Voici la liste des rendez vous</p>
       </div>
 
       {/* Search Bar */}
@@ -116,7 +142,7 @@ function RendezVous({ getAuthHeaders, fetchStats }) {
           <IoSearchSharp className="search-icon" />
           <input
             type="text"
-            placeholder="Rechercher par nom, email ou rôle..."
+            placeholder="Rechercher par nom du Patient ,nom du Médecin, motif , email ou rôle..."
             className="search-input"
             value={searchName}
             onChange={handleSearch}
@@ -132,99 +158,75 @@ function RendezVous({ getAuthHeaders, fetchStats }) {
         </div>
       )}
 
-      {/* Users Table */}
+      {/* RendezVous Table */}
       <div className="table-container">
         <table className="user-table">
           <thead>
             <tr>
               <th>ID</th>
-              <th>Nom</th>
-              <th>Email</th>
-              <th>Rôle</th>
+              <th>Patient</th>
+              <th>Médecin</th>
+              <th>Date Début</th>
+              <th>Date Fin</th>
+              <th>Statut</th>
+              <th>Motif</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {currentUsers.map((user, index) => (
-              <tr key={user.id} className="fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
-                <td>{user.id}</td>
+            {currentRendezVous.map((rd, index) => (
+              <tr key={rd.id} className="fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                <td>{rd.id}</td>
+                <td>{rd.patient.nom + " " + rd.patient.prenom}</td>
+                <td>{rd.medecin.nom + " " + rd.medecin.prenom}</td>
+                <td>{rd.dateDebut}</td>
+                <td>{rd.dateFin}</td>
                 <td>
-                  {editingUser?.id === user.id ? (
-                    <input
-                      className="edit-input"
-                      value={editingUser.nom}
-                      onChange={e => setEditingUser({ ...editingUser, nom: e.target.value })}
-                      placeholder="Nom complet"
-                    />
-                  ) : user.nom}
-                </td>
-                <td>
-                  {editingUser?.id === user.id ? (
-                    <input
-                      className="edit-input"
-                      type="email"
-                      value={editingUser.email}
-                      onChange={e => setEditingUser({ ...editingUser, email: e.target.value })}
-                      placeholder="Email"
-                    />
-                  ) : user.email}
-                </td>
-                <td>
-                  {editingUser?.id === user.id ? (
+                  {editingId === rd.id ? (
                     <select
-                      className="edit-input"
-                      value={editingUser.role}
-                      onChange={e => setEditingUser({ ...editingUser, role: e.target.value })}
+                      className="status-edit-select"
+                      value={rd.statut}
+                      onChange={(e) => handleStatusChange(rd.id, e.target.value)}
+                      autoFocus
                     >
-                      <option value="ADMIN">Administrateur</option>
-                      <option value="MEDCIN">Médecin</option>
-                      <option value="PATIENT">Patient</option>
+                      <option value="EN_ATTENTE">⏳ En attente</option>
+                      <option value="CONFIRME">✅ Confirmé</option>
+                      <option value="TERMINE">🎯 Terminé</option>
+                      <option value="ANNULE">❌ Annulé</option>
+                      <option value="REFUSE">🚫 Refusé</option>
                     </select>
                   ) : (
-                    <span className={`role-badge ${
-                      user.role === 'ADMIN' ? 'role-admin' :
-                      user.role === 'PATIENT' ? 'role-patient' :
-                      'role-medecin'
-                    }`}>
-                      {user.role === 'ADMIN' ? 'Admin' :
-                       user.role === 'MEDCIN' ? 'Médecin' :
-                       'Patient'}
-                    </span>
+                    <div 
+                      className={`status-pill ${getStatusClass(rd.statut)}`}
+                      onClick={() => setEditingId(rd.id)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {getStatusIcon(rd.statut)}
+                      <span>{getStatusLabel(rd.statut)}</span>
+                    </div>
                   )}
                 </td>
+                <td>{rd.motif}</td>
                 <td>
                   <div className="action-buttons">
-                    {editingUser?.id === user.id ? (
-                      <>
-                        <button className="ubtn btn-save" onClick={handleUpdate}>
-                          <FaRegCheckCircle /> Sauvegarder
-                        </button>
-                        <button className="ubtn btn-annuler" onClick={() => setEditingUser(null)}>
-                          <MdCancel /> Annuler
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button className="ubtn btn-edit" onClick={() => setEditingUser(user)}>
-                          <MdPublishedWithChanges /> Modifier
-                        </button>
-                        <button className="ubtn btn-delete" onClick={() => {
-                          if (window.confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
-                            handleDelete(user.id);
-                          }
-                        }}>
-                          <MdDelete /> Supprimer
-                        </button>
-                      </>
-                    )}
+                    <button 
+                      className="ubtn btn-delete" 
+                      onClick={() => {
+                        if (window.confirm('Êtes-vous sûr de vouloir supprimer ce rendez-vous ?')) {
+                          handleDelete(rd.id);
+                        }
+                      }}
+                    >
+                      <MdDelete /> Supprimer
+                    </button>
                   </div>
                 </td>
               </tr>
             ))}
-            {filteredUsers.length === 0 && (
+            {filteredRendezVous.length === 0 && (
               <tr>
-                <td colSpan="5" style={{ textAlign: 'center', padding: '1rem', color: '#999' }}>
-                  {users.length === 0 ? 'Aucun utilisateur trouvé.' : 'Aucun utilisateur ne correspond à la recherche.'}
+                <td colSpan="8" style={{ textAlign: 'center', padding: '1rem', color: '#999' }}>
+                  {rendezVous.length === 0 ? 'Aucun rendez-vous trouvé.' : 'Aucun rendez-vous ne correspond à la recherche.'}
                 </td>
               </tr>
             )}
@@ -234,61 +236,12 @@ function RendezVous({ getAuthHeaders, fetchStats }) {
 
       {/* Pagination Controls */}
       <div className="pagination">
-        <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}><TbPlayerTrackPrevFilled/></button>
+        <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
+          <TbPlayerTrackPrevFilled/>
+        </button>
         <span>Page {currentPage} sur {totalPages}</span>
-        <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}><TbPlayerTrackNextFilled/></button>
-      </div>
-
-      {/* Add New User Form */}
-      <div className="add-user-section">
-        <h3 className="add-user-title">Ajouter un nouvel utilisateur</h3>
-        <div className="form-grid">
-          <div className="form-group">
-            <label className="form-lebel" style={{ color: "#003f82" }}>Nom complet</label>
-            <input
-              type="text"
-              className="form-input"
-              placeholder="Entrez le nom complet"
-              value={newUser.nom}
-              onChange={e => setNewUser({ ...newUser, nom: e.target.value })}
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-lebel" style={{ color: "#003f82" }}>Adresse Email</label>
-            <input
-              type="email"
-              className="form-input"
-              placeholder="utilisateur@example.com"
-              value={newUser.email}
-              onChange={e => setNewUser({ ...newUser, email: e.target.value })}
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-lebel" style={{ color: "#003f82" }}>Mot de passe</label>
-            <input
-              type="password"
-              className="form-input"
-              placeholder="Entrez le mot de passe"
-              value={newUser.mot_de_passe}
-              onChange={e => setNewUser({ ...newUser, mot_de_passe: e.target.value })}
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-lebel" style={{ color: "#003f82" }}>Rôle</label>
-            <select
-              className="form-input"
-              value={newUser.role}
-              onChange={e => setNewUser({ ...newUser, role: e.target.value })}
-            >
-              <option value="">Sélectionner un rôle</option>
-              <option value="ADMIN">Administrateur</option>
-              <option value="MAITREOUVRAGE">Maître d'ouvrage</option>
-              <option value="CONCURRENT">Concurrent</option>
-            </select>
-          </div>
-        </div>
-        <button className="btn-create" onClick={handleCreate}>
-          <MdCreateNewFolder /> Créer le rendez-vous
+        <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>
+          <TbPlayerTrackNextFilled/>
         </button>
       </div>
     </div>
