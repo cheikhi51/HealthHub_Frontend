@@ -47,7 +47,7 @@ function Notifications({ getAuthHeaders, fetchStats, userId }) {
   const markAsRead = async (notificationId) => {
     try {
       const headers = getAuthHeaders();
-      await axios.put(`http://localhost:8080/api/patients/notifications/${notificationId}/read`, {}, { headers });
+      await axios.put(`http://localhost:8080/api/patients/${userId}/notifications/${notificationId}/lire`, {}, { headers });
       
       setNotifications(prev => prev.map(notif => 
         notif.id === notificationId 
@@ -81,7 +81,7 @@ function Notifications({ getAuthHeaders, fetchStats, userId }) {
   const deleteNotification = async (notificationId) => {
     try {
       const headers = getAuthHeaders();
-      await axios.delete(`http://localhost:8080/api/patients/notifications/${notificationId}`, { headers });
+      await axios.delete(`http://localhost:8080/api/patients/${userId}/notifications/${notificationId}`, { headers });
       
       setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
       setSelectedNotifications(prev => prev.filter(id => id !== notificationId));
@@ -96,7 +96,7 @@ function Notifications({ getAuthHeaders, fetchStats, userId }) {
       const headers = getAuthHeaders();
       await Promise.all(
         selectedNotifications.map(id => 
-          axios.delete(`http://localhost:8080/api/patients/notifications/${id}`, { headers })
+          axios.delete(`http://localhost:8080/api/patients/${userId}/notifications/${id}`, { headers })
         )
       );
       
@@ -200,7 +200,7 @@ function Notifications({ getAuthHeaders, fetchStats, userId }) {
         <div className="notifications-actions">
           {selectedNotifications.length > 0 && (
             <button 
-              className="btn-delete-selected"
+              className="delete-button-selected"
               onClick={deleteSelected}
             >
               <IoTrash />
@@ -338,7 +338,7 @@ function Notifications({ getAuthHeaders, fetchStats, userId }) {
                   </button>
                 )}
                 <button
-                  className="btn-delete"
+                  className="delete-button"
                   onClick={() => deleteNotification(notification.id)}
                   title="Supprimer"
                 >

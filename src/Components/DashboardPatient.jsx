@@ -1,15 +1,14 @@
 import Logout from "./Logout";
 import { useEffect } from "react";
-import {Users,Settings , User,BriefcaseBusiness, Stethoscope, BellDotIcon, List} from "lucide-react";
+import {Settings ,BriefcaseBusiness, Stethoscope, BellDotIcon, List} from "lucide-react";
 import { TbLogout } from "react-icons/tb";
 import { useState } from "react";
-import RendezVous from "./RendezVous";
-import Statistiques from "./Statistiques";
 import Notifications from "./Notifications";
 import Chatbot from "./Chatbot";
 import axios from "axios";
 import SidebarPatient from "./SidebarPatient";
 import RendezVousPatient from "./RendezVousPatient";
+import Medecins from "./Medecins";
 function DashboardPatient({ setAuthToken }) {
   const [showLogout, setShowLogout] = useState(false);
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -122,8 +121,8 @@ function DashboardPatient({ setAuthToken }) {
         return <Notifications getAuthHeaders={getAuthHeaders} fetchStats={fetchStats} userId={currentUser.id} ></Notifications>;
       case 'rendez-vous':
         return <RendezVousPatient getAuthHeaders={getAuthHeaders} fetchStats={fetchStats} userId={currentUser.id}></RendezVousPatient>;
-      case 'statistiques':
-        return <Statistiques getAuthHeaders={getAuthHeaders}></Statistiques>;
+      case 'medecins':
+        return <Medecins getAuthHeaders={getAuthHeaders}></Medecins>;
       case 'assistant-ia':
         return <Chatbot getAuthHeaders={getAuthHeaders} userId={currentUser.id} />;
       default:

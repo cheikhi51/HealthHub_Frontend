@@ -4159,7 +4159,7 @@ body {
 }
 
 .btn-mark-all-read,
-.btn-delete-selected {
+.delete-button-selected {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -4185,13 +4185,13 @@ body {
   box-shadow: 0 4px 12px rgba(0, 168, 107, 0.3);
 }
 
-.btn-delete-selected {
+.delete-button-selected {
   background: #fef2f2;
   color: var(--neutral-red);
   border: 1px solid #fecaca;
 }
 
-.btn-delete-selected:hover {
+.delete-button-selected:hover {
   background: var(--neutral-red);
   color: white;
   transform: translateY(-2px);
@@ -4438,7 +4438,7 @@ body {
 }
 
 .btn-mark-read,
-.btn-delete {
+.delete-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4462,12 +4462,12 @@ body {
   transform: scale(1.1);
 }
 
-.btn-delete {
+.delete-button {
   background: #fef2f2;
   color: var(--neutral-red);
 }
 
-.btn-delete:hover {
+.delete-button:hover {
   background: var(--neutral-red);
   color: white;
   transform: scale(1.1);
@@ -4586,4 +4586,29 @@ body {
     flex-direction: row;
     margin-left: auto;
   }
+}
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.badge.disponible {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.badge.non-disponible {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.badge.indisponible {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
 }
