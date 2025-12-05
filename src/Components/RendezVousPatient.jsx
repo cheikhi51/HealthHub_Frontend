@@ -77,15 +77,66 @@ function RendezVousPatient ({getAuthHeaders,fetchStats,userId}) {
     }
   };
 
-  const handleCreate = async()=>{
-    const headers = getAuthHeaders();
-    try{
-        const response = await axios.post("http://localhost:8080/api/patients/rendez-vous/par-specialite", {headers});
-        setNewRendezVous(response.data);
-    }catch(err){
-        console.error("erreur lors de la creation du rendez-vous : ", err);
+  const handleCreate = async () => {
+  const headers = getAuthHeaders();
+  try {
+    if (!newRendezVous.dateDebut || !newRendezVous.dateFin || !newRendezVous.motif || !newRendezVous.specialite) {
+      setError("Veuillez remplir tous les champs obligatoires");
+      return;
+    }
+
+    // Fonction pour formater correctement pour Java Instant
+    const formatForJavaInstant = (dateString) => {
+      if (!dateString) return "";
+      
+      // datetime-local donne "2025-12-06T03:22"
+      // On ajoute ":00" pour les secondes et "Z" pour UTC
+      return dateString + ":00Z";
+    };
+
+    const rendezVousData = {
+      dateDebut: formatForJavaInstant(newRendezVous.dateDebut),
+      dateFin: formatForJavaInstant(newRendezVous.dateFin),    
+      motif: newRendezVous.motif,
+      specialite: newRendezVous.specialite
+    };
+
+    console.log("Données envoyées:", rendezVousData);
+    console.log("Exemple de date formatée:", rendezVousData.dateDebut); // Doit être "2025-12-06T03:22:00Z"
+
+    const response = await axios.post(
+      "http://localhost:8080/api/patients/rendez-vous/par-specialite",
+      rendezVousData,
+      { headers }
+    );
+    
+    // Reset form after success
+    setNewRendezVous({
+      dateDebut: "",
+      dateFin: "",
+      motif: "",
+      specialite: ""
+    });
+    
+    // Refresh data
+    fetchRendezVous();
+    fetchStats();
+    setError(null);
+    
+  } catch(err) {
+    console.error("Erreur lors de la création du rendez-vous : ", err);
+    
+    if (err.response) {
+      console.error("Données d'erreur:", err.response.data);
+      console.error("Status:", err.response.status);
+      setError(`Erreur ${err.response.status}: ${err.response.data.message || "Erreur lors de la création"}`);
+    } else if (err.request) {
+      setError("Pas de réponse du serveur. Vérifiez votre connexion.");
+    } else {
+      setError(`Erreur: ${err.message}`);
     }
   }
+};
 
   const handleStatusChange = async (id, newStatus) => {
     try {
@@ -268,7 +319,7 @@ function RendezVousPatient ({getAuthHeaders,fetchStats,userId}) {
               <div className="form-group">
                 <label className="form-lebel" style={{ color: "#003f82" }}>dateDebut </label>
                 <input
-                  type="date"
+                  type="datetime-local"
                   className="form-input"
                   placeholder="Entrez la date de début"
                   value={newRendezVous.dateDebut}
@@ -279,7 +330,7 @@ function RendezVousPatient ({getAuthHeaders,fetchStats,userId}) {
               <div className="form-group">
                 <label className="form-lebel" style={{ color: "#003f82" }}>dateFin </label>
                 <input
-                  type="date"
+                  type="datetime-local"
                   className="form-input"
                   placeholder="Entrez la date de fin"
                   value={newRendezVous.dateFin}
