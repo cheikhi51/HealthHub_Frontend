@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { IoSearchSharp } from "react-icons/io5";
-import { MdCheck, MdDelete } from "react-icons/md";
+import { MdCheck } from "react-icons/md";
 import { TbPlayerTrackNextFilled } from "react-icons/tb";
 import { TbPlayerTrackPrevFilled } from "react-icons/tb";
 function RendezVousMedecin({getAuthHeaders, fetchStats,userId}) {

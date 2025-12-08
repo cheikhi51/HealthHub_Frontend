@@ -3,13 +3,12 @@ import { use, useEffect } from "react";
 import {Users,Settings , User,BriefcaseBusiness} from "lucide-react";
 import { TbLogout } from "react-icons/tb";
 import { useState } from "react";
-import Utilisateurs from "./Utilisateurs";
 import RendezVousMedecin from "./RendezVousMedecin";
-import Statistiques from "./Statistiques";
+import StatistiquesMedecin from "./StatistiqueMedecin";
 import Chatbot from "./Chatbot";
 import SidebarMedecin from "./SidebarMedecin ";
 import axios from "axios";
-import Patient from "../Patient";
+import Patient from "./Patient";
 function DashboardMedecin({ setAuthToken }) {
   const [showLogout, setShowLogout] = useState(false);
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -125,7 +124,7 @@ function DashboardMedecin({ setAuthToken }) {
       case 'rendez-vous':
         return <RendezVousMedecin getAuthHeaders={getAuthHeaders} fetchStats={fetchStats} userId={currentUser.id}></RendezVousMedecin>;
       case 'statistiques':
-        return <Statistiques getAuthHeaders={getAuthHeaders}></Statistiques>;
+        return <StatistiquesMedecin getAuthHeaders={getAuthHeaders} userId={currentUser.id}></StatistiquesMedecin>;
       case 'assistant-ia':
         return <Chatbot getAuthHeaders={getAuthHeaders} userId={currentUser.id} />;
       default:
