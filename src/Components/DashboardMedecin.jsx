@@ -4,11 +4,12 @@ import {Users,Settings , User,BriefcaseBusiness} from "lucide-react";
 import { TbLogout } from "react-icons/tb";
 import { useState } from "react";
 import Utilisateurs from "./Utilisateurs";
-import RendezVous from "./RendezVous";
+import RendezVousMedecin from "./RendezVousMedecin";
 import Statistiques from "./Statistiques";
 import Chatbot from "./Chatbot";
 import SidebarMedecin from "./SidebarMedecin ";
 import axios from "axios";
+import Patient from "../Patient";
 function DashboardMedecin({ setAuthToken }) {
   const [showLogout, setShowLogout] = useState(false);
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -119,10 +120,10 @@ function DashboardMedecin({ setAuthToken }) {
 
   const renderContent = () => {
     switch (activeSection) {
-      case 'utilisateurs':
-        return <Utilisateurs getAuthHeaders={getAuthHeaders} fetchStats={fetchStats} />;
+      case 'patients':
+        return <Patient getAuthHeaders={getAuthHeaders} fetchStats={fetchStats} userId={currentUser.id}/>;
       case 'rendez-vous':
-        return <RendezVous getAuthHeaders={getAuthHeaders} fetchStats={fetchStats}></RendezVous>;
+        return <RendezVousMedecin getAuthHeaders={getAuthHeaders} fetchStats={fetchStats} userId={currentUser.id}></RendezVousMedecin>;
       case 'statistiques':
         return <Statistiques getAuthHeaders={getAuthHeaders}></Statistiques>;
       case 'assistant-ia':

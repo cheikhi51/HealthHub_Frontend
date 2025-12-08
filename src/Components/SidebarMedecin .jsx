@@ -7,7 +7,7 @@ import { FaRobot } from "react-icons/fa6";
 function SidebarMedecin({ isOpen, onClose, onSectionChange, activeSection }) {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: <MdDashboard/> },
-    { id: 'utilisateurs', label: 'Utilisateurs', icon: <LuUsers/> },
+    { id: 'patients', label: 'Patients', icon: <LuUsers/> },
     { id: 'rendez-vous', label: 'Rendez-Vous', icon: <IoIosListBox /> },
     { id: 'statistiques', label: 'Statistiques', icon: <ImStatsDots /> },
     { id: 'assistant-ia', label: 'Chatbot', icon: <FaRobot/> }

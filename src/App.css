@@ -2814,6 +2814,15 @@ body {
   background: #fee2e2;
   transform: translateY(-1px);
 }
+.btn-complete {
+  color: #17417f;
+  background: #dcf3fc;
+  border: 1px solid #86d6ef;
+}
+.btn-complete:hover {
+  background: #bbe0f7;
+  transform: translateY(-1px);
+}
 
 /* Sauvegarder */
 .btn-save {
