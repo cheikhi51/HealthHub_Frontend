@@ -4,12 +4,14 @@ import { LuUsers } from "react-icons/lu";
 import { IoIosListBox } from "react-icons/io";
 import { ImStatsDots } from "react-icons/im";
 import { FaRobot } from "react-icons/fa6";
+import { ListCheck } from 'lucide-react';
 function SidebarMedecin({ isOpen, onClose, onSectionChange, activeSection }) {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: <MdDashboard/> },
     { id: 'patients', label: 'Patients', icon: <LuUsers/> },
     { id: 'rendez-vous', label: 'Rendez-Vous', icon: <IoIosListBox /> },
     { id: 'statistiques', label: 'Statistiques', icon: <ImStatsDots /> },
+    {id : 'historique', label: 'Historique', icon: <ListCheck/> },
     { id: 'assistant-ia', label: 'Chatbot', icon: <FaRobot/> }
   ];
 

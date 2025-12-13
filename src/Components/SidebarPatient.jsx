@@ -2,13 +2,14 @@ import './Sidebar.css';
 import { MdDashboard, MdNotifications } from "react-icons/md";
 import { IoIosListBox } from "react-icons/io";
 import { FaRobot } from "react-icons/fa6";
-import {Stethoscope} from "lucide-react";
+import {ListCheck, Stethoscope} from "lucide-react";
 function SidebarPatient({ isOpen, onClose, onSectionChange, activeSection }) {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: <MdDashboard/> },
     { id: 'notifications', label: 'Notifications', icon : <MdNotifications />},
     { id: 'rendez-vous', label: 'Rendez-Vous', icon: <IoIosListBox /> },
     { id: 'medecins', label: 'Médecins', icon: <Stethoscope /> },
+    { id: 'Historique', label: 'Historique', icon: <ListCheck /> },
     { id: 'assistant-ia', label: 'Chatbot', icon: <FaRobot/> }
   ];
 

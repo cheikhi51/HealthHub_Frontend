@@ -7,6 +7,7 @@ import RendezVousMedecin from "./RendezVousMedecin";
 import StatistiquesMedecin from "./StatistiqueMedecin";
 import Chatbot from "./Chatbot";
 import SidebarMedecin from "./SidebarMedecin ";
+import HistoriqueUtilisateur from "./HistoriqueUtilisateur";
 import axios from "axios";
 import Patient from "./Patient";
 function DashboardMedecin({ setAuthToken }) {
@@ -125,6 +126,8 @@ function DashboardMedecin({ setAuthToken }) {
         return <RendezVousMedecin getAuthHeaders={getAuthHeaders} fetchStats={fetchStats} userId={currentUser.id}></RendezVousMedecin>;
       case 'statistiques':
         return <StatistiquesMedecin getAuthHeaders={getAuthHeaders} userId={currentUser.id}></StatistiquesMedecin>;
+        case 'historique':
+        return <HistoriqueUtilisateur getAuthHeaders={getAuthHeaders} userId={currentUser.id} />;
       case 'assistant-ia':
         return <Chatbot getAuthHeaders={getAuthHeaders} userId={currentUser.id} />;
       default:
