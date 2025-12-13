@@ -8,6 +8,7 @@ import RendezVous from "./RendezVous";
 import Statistiques from "./Statistiques";
 import Chatbot from "./Chatbot";
 import AdminSidebar from "./AdminSidebar";
+import HistoriqueAdmin from "./HistoriqueAdmin";
 import axios from "axios";
 function DashboardAdmin({ setAuthToken }) {
   const [showLogout, setShowLogout] = useState(false);
@@ -131,6 +132,8 @@ function DashboardAdmin({ setAuthToken }) {
         return <RendezVous getAuthHeaders={getAuthHeaders} fetchStats={fetchStats}></RendezVous>;
       case 'statistiques':
         return <Statistiques getAuthHeaders={getAuthHeaders}></Statistiques>;
+      case 'historique':
+        return <HistoriqueAdmin getAuthHeaders={getAuthHeaders} userId={currentUser.id} />;
       case 'assistant-ia':
         return <Chatbot getAuthHeaders={getAuthHeaders} userId={currentUser.id} />;
       default:

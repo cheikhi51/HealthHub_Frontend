@@ -84,24 +84,14 @@ function StatistiquesMedecin({ getAuthHeaders ,userId}) {
         <h2 className="section-title">
           Statistiques
         </h2>
-        <p className="section-subtitle">Vue d'ensemble des données de la plateforme HealthHub</p>
+        <p className="section-subtitle">Voir les statistiques de votre activité</p>
       </div>
 
       {/* Statistiques Générales */}
       <div className="stats-section">
         <h3 className="stats-section-title">Statistiques Générales</h3>
         <div className="stats-grid">
-          {/* Total Utilisateurs */}
-          <div className="stat-card card-purple">
-            <div className="stat-icon">
-              <FaUsers />
-            </div>
-            <div className="stat-content">
-              <h4>Total Utilisateurs</h4>
-              <p className="stat-number">{stats.nombreTotalUtilisateurs || 0}</p>
-              <span className="stat-label">Utilisateurs inscrits</span>
-            </div>
-          </div>
+          
 
           {/* Total Patients */}
           <div className="stat-card card-green">
@@ -110,20 +100,8 @@ function StatistiquesMedecin({ getAuthHeaders ,userId}) {
             </div>
             <div className="stat-content">
               <h4>Patients</h4>
-              <p className="stat-number">{stats.nombreTotalPatients || 0}</p>
+              <p className="stat-number">{stats.nombrePatientsUniques || 0}</p>
               <span className="stat-label">Patients enregistrés</span>
-            </div>
-          </div>
-
-          {/* Total Médecins */}
-          <div className="stat-card card-blue">
-            <div className="stat-icon">
-              <FaUserMd />
-            </div>
-            <div className="stat-content">
-              <h4>Médecins</h4>
-              <p className="stat-number">{stats.nombreTotalMedecins || 0}</p>
-              <span className="stat-label">Médecins disponibles</span>
             </div>
           </div>
 

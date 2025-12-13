@@ -31,8 +31,12 @@ function Patient({ getAuthHeaders, fetchStats ,userId}) {
   const totalPages = Math.ceil(filteredPatients.length / itemsPerPage);
 
   useEffect(() => {
-    fetchStats();
-    fetchPatients();
+    if (userId) {
+      fetchStats();
+      fetchPatients();
+    }
+  
+    
   }, []);
 
   const fetchPatients = async () => {
