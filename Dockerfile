@@ -1,5 +1,5 @@
-# Stage de build
-FROM node:18-alpine AS build
+# Stage de build - Use Node.js 20 or 22 (Vite requirement)
+FROM node:22-alpine AS build
 
 # Set working directory
 WORKDIR /app
@@ -7,23 +7,22 @@ WORKDIR /app
 # Copy package files
 COPY package.json package-lock.json ./
 
-# Clean install dependencies (silent to reduce logs)
+# Clean install dependencies
 RUN npm ci --silent --no-audit --progress=false
 
 # Copy source code
 COPY . .
 
 # Build the application
-
 RUN npm run build
 
-# Verify build output exists
+# Verify build output exists (Vite uses 'dist' by default)
 RUN ls -la /app/dist
 
 # Stage de production
 FROM nginx:alpine
 
-# Install curl for health checks (optional)
+# Install curl for health checks
 RUN apk add --no-cache curl
 
 # Copy built files from build stage
