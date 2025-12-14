@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { useEffect } from 'react';
-import LogoIcon from '/HealthHubIcon.png';
 import Landingpage from './Landingpage';
 import { Navigate } from 'react-router-dom';
 import DashboardAdmin from './Components/DashboardAdmin';
@@ -52,7 +51,7 @@ function App() {
   if (loading){
     return (
       <div className='logo-loader'>
-        <img src={LogoIcon} alt="HealthHub logo" className='logo-heart'/>
+        <img src="./HealthHubIcon.png" alt="HealthHub logo" className='logo-heart'/>
         <div className="logo-text"><span className='first-part'>Health</span><span className='second-part'>Hub</span></div>
       </div>
     )
