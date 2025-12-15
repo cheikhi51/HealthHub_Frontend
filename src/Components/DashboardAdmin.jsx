@@ -161,7 +161,21 @@ function DashboardAdmin({ setAuthToken }) {
               })}
             </div>
             {/* Dashboard Overview */}
-           
+           <div className="dashboard-box">
+            <h3>📈 Indicateurs clés</h3>
+            <p>
+              Taux de confirmation : 
+              <strong>
+                {statistiques.nombreTotalRendezVous > 0
+                  ? Math.round(
+                      (statistiques.nombreRendezVousConfirmes /
+                        statistiques.nombreTotalRendezVous) * 100
+                    )
+                  : 0}%
+              </strong>
+            </p>
+          </div>
+
           </>
         );
     }
