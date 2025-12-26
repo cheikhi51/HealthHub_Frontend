@@ -9,6 +9,8 @@ import Statistiques from "./Statistiques";
 import Chatbot from "./Chatbot";
 import AdminSidebar from "./AdminSidebar";
 import HistoriqueAdmin from "./HistoriqueAdmin";
+import RendezVousChart from "./RendezVousChart";
+import UserBarChart from "./UsersBarChart";
 import axios from "axios";
 function DashboardAdmin({ setAuthToken }) {
   const [showLogout, setShowLogout] = useState(false);
@@ -161,21 +163,16 @@ function DashboardAdmin({ setAuthToken }) {
               })}
             </div>
             {/* Dashboard Overview */}
+            <div className="dashboard-wrapper">
            <div className="dashboard-box">
-            <h3>📈 Indicateurs clés</h3>
-            <p>
-              Taux de confirmation : 
-              <strong>
-                {statistiques.nombreTotalRendezVous > 0
-                  ? Math.round(
-                      (statistiques.nombreRendezVousConfirmes /
-                        statistiques.nombreTotalRendezVous) * 100
-                    )
-                  : 0}%
-              </strong>
-            </p>
-          </div>
-
+              <h3 className="dashboard-box-title">Répartition des rendez-vous</h3>
+              <RendezVousChart statistiques={statistiques} />
+            </div>
+            <div className="dashboard-box">
+              <h3 className="dashboard-box-title">Répartition des utilisateurs</h3>
+              <UserBarChart statistiques={statistiques} />
+            </div>
+            </div>
           </>
         );
     }
