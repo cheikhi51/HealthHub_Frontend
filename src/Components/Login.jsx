@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
 import axios from 'axios';
@@ -49,9 +49,28 @@ function Login({setAuthToken}) {
     
     };
 
+    useEffect(()=>{
+    const loginAnimation = document.querySelectorAll('.fade-in-element');
+    const loginObserver = new IntersectionObserver((entities)=>{
+        entities.forEach(entry =>{
+        if (entry.isIntersecting){
+            entry.target.classList.add('fade-in');
+        }
+        });
+    },{ threshold: 0.1 });
+
+        loginAnimation.forEach(element=>{
+        loginObserver.observe(element);
+        });
+
+    return ()=>{
+        loginAnimation.forEach(element => loginObserver.unobserve(element));
+    };
+
+  }, []);
     return (
         <div className="login-page">
-            <div className="login-container">
+            <div className="login-container fade-in-element">
                 {/* Left Side - Form */}
                 <div className="login-form-section">
                     <div className="login-header">

@@ -23,16 +23,35 @@ function Contact() {
         }, 3000);
         return () => clearInterval(successInterval);
     })
+    useEffect(()=>{
+        const contactAnimation = document.querySelectorAll('.slide-in-element');
+        const contactObserver = new IntersectionObserver((entities)=>{
+            entities.forEach(entry =>{
+            if (entry.isIntersecting){
+                entry.target.classList.add('slide-in');
+            }
+            });
+        },{ threshold: 0.1 });
+
+            contactAnimation.forEach(element=>{
+            contactObserver.observe(element);
+            });
+
+        return ()=>{
+            contactAnimation.forEach(element => contactObserver.unobserve(element));
+        };
+
+    }, []);
     return (
         <div className="contact-wrapper" id="contact">
-            <h2 className="section-title">Contactez-nous</h2>
-            <p className="contact-intro">
+            <h2 className="section-title fade-up-element">Contactez-nous</h2>
+            <p className="contact-intro fade-up-element">
                 Une question ? Notre équipe est à votre écoute pour vous accompagner
             </p>
             
             <div className="contact-container">
                 {/* Section Formulaire */}
-                <div className="contact-form-section" >
+                <div className="contact-form-section slide-in-element" >
                     <form className="contact-form" onSubmit={handleSubmit}>
                         <div className="form-row">
                             <div className="form-group">
@@ -97,8 +116,8 @@ function Contact() {
                         {successMessage && <div className="success-message"><MdCheckCircle />{successMessage}</div>}
                     </form>
                     
-                    <div className="contact-info">
-                        <div className="info-item">
+                    <div className="contact-info ">
+                        <div className="info-item slide-in-element">
                             <div className="info-icon"><MdEmail /></div>
                             <div className="info-text">
                                 <h4>Email</h4>
@@ -106,7 +125,7 @@ function Contact() {
                             </div>
                         </div>
                         
-                        <div className="info-item">
+                        <div className="info-item slide-in-element">
                             <div className="info-icon"><MdPhone /></div>
                             <div className="info-text">
                                 <h4>Téléphone</h4>
@@ -114,7 +133,7 @@ function Contact() {
                             </div>
                         </div>
                         
-                        <div className="info-item">
+                        <div className="info-item slide-in-element">
                             <div className="info-icon"><MdAccessTime /></div>
                             <div className="info-text">
                                 <h4>Horaires</h4>
@@ -125,7 +144,7 @@ function Contact() {
                 </div>
                 
                 {/* Section Globe */}
-                <div className="contact-visual-section">
+                <div className="contact-visual-section slide-in-element">
                     <div className="globe-container">
                         <img src={worldMap} alt="HealthHub - Service mondial" className="world-map" />
                     </div>

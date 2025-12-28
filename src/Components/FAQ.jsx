@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 
 function FAQ() {
     
@@ -12,6 +12,7 @@ function FAQ() {
         }));
     }
     
+
     const questions = [
         {
             "id": 1,
@@ -35,12 +36,32 @@ function FAQ() {
         }
     ];
     
+    useEffect(()=>{
+        const faqAnimation = document.querySelectorAll('.fade-up-element');
+        const faqObserver = new IntersectionObserver((entities)=>{
+            entities.forEach(entry =>{
+            if (entry.isIntersecting){
+                entry.target.classList.add('fade-up');
+            }
+            });
+        },{ threshold: 0.1 });
+
+            faqAnimation.forEach(element=>{
+            faqObserver.observe(element);
+            });
+
+        return ()=>{
+            faqAnimation.forEach(element => faqObserver.unobserve(element));
+        };
+
+    }, []);
+
     return (
         <div className="faq-wrapper" id="faq">
-            <h2 className="section-title">Questions Fréquentes</h2>
-            <p className="faq-intro">Trouvez rapidement les réponses à vos questions</p>
+            <h2 className="section-title fade-up-element">Questions Fréquentes</h2>
+            <p className="faq-intro fade-up-element">Trouvez rapidement les réponses à vos questions</p>
             
-            <div className="faq-container">
+            <div className="faq-container fade-up-element">
                 {questions.map(question => (
                     <div 
                         key={question.id} 

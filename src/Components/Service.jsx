@@ -1,13 +1,35 @@
+import { useEffect } from "react";
 function Service() {
+
+    useEffect(()=>{
+  const servicesAnimation = document.querySelectorAll('.fade-up-element');
+  const servicesObserver = new IntersectionObserver((entities)=>{
+    entities.forEach(entry =>{
+      if (entry.isIntersecting){
+        entry.target.classList.add('fade-up');
+      }
+    });
+  },{ threshold: 0.1 });
+
+    servicesAnimation.forEach(element=>{
+      servicesObserver.observe(element);
+    });
+
+  return ()=>{
+    servicesAnimation.forEach(element => servicesObserver.unobserve(element));
+   };
+
+  }, []);
+
     return (
         <div className="service-container" id="services">
-            <h2 className="section-title">Nos Services</h2>
-            <p className="service-intro">
+            <h2 className="section-title fade-up-element">Nos Services</h2>
+            <p className="service-intro fade-up-element">
                 Découvrez notre gamme complète de services médicaux pour prendre soin de votre santé
             </p>
             
             <div className="services-grid">
-                <div className="service-card">
+                <div className="service-card fade-up-element">
                     <div className="service-icon"><img src="/medicalIcon.svg" alt="general medicin image"/></div>
                     <h3 className="service-name">Médecine Générale</h3>
                     <p className="service-description">
@@ -21,7 +43,7 @@ function Service() {
                     <button className="service-button">Prendre RDV</button>
                 </div>
 
-                <div className="service-card">
+                <div className="service-card fade-up-element">
                     <div className="service-icon"><img src="/heartIcon.svg" alt="heart image"/></div>
                     <h3 className="service-name">Cardiologie</h3>
                     <p className="service-description">
@@ -35,7 +57,7 @@ function Service() {
                     <button className="service-button">Prendre RDV</button>
                 </div>
 
-                <div className="service-card">
+                <div className="service-card fade-up-element">
                     <div className="service-icon"><img src="/bonesIcon.svg" alt="orthopedics image"/></div>
                     <h3 className="service-name">Orthopédie</h3>
                     <p className="service-description">
@@ -49,7 +71,7 @@ function Service() {
                     <button className="service-button">Prendre RDV</button>
                 </div>
 
-                <div className="service-card">
+                <div className="service-card fade-up-element">
                     <div className="service-icon"><img src="/babyIcon.svg" alt="baby image"/></div>
                     <h3 className="service-name">Pédiatrie</h3>
                     <p className="service-description">
@@ -63,7 +85,7 @@ function Service() {
                     <button className="service-button">Prendre RDV</button>
                 </div>
 
-                <div className="service-card">
+                <div className="service-card fade-up-element">
                     <div className="service-icon"><img src="/eyeIcon.svg" alt="eye image"/></div>
                     <h3 className="service-name">Ophtalmologie</h3>
                     <p className="service-description">
@@ -77,7 +99,7 @@ function Service() {
                     <button className="service-button">Prendre RDV</button>
                 </div>
 
-                <div className="service-card">
+                <div className="service-card fade-up-element">
                     <div className="service-icon"><img src="/teethIcon.svg" alt="dentistry image"/></div>
                     <h3 className="service-name">Dentisterie</h3>
                     <p className="service-description">
@@ -92,7 +114,7 @@ function Service() {
                 </div>
             </div>
 
-            <div className="service-footer">
+            <div className="service-footer fade-up-element">
                 <p className="footer-text">
                     Vous ne trouvez pas la spécialité que vous cherchez ?
                 </p>

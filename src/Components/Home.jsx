@@ -25,11 +25,30 @@ function Home() {
             section.scrollIntoView({ behavior: 'smooth' });
         }
     }
+    useEffect(()=>{
+  const homeAnimation = document.querySelectorAll('.pop-up-element');
+  const homeObserver = new IntersectionObserver((entities)=>{
+    entities.forEach(entry =>{
+      if (entry.isIntersecting){
+        entry.target.classList.add('pop-up');
+      }
+    });
+  },{ threshold: 0.1 });
+
+    homeAnimation.forEach(element=>{
+      homeObserver.observe(element);
+    });
+
+  return ()=>{
+    homeAnimation.forEach(element => homeObserver.unobserve(element));
+   };
+
+  }, []);
     return (
         <div className="home-container" id="home">
-            <h1 className="hero-title">Bienvenue chez HealthHub</h1>
-            <h3 className="hero-subtitle">Réservez, consultez, suivez votre santé en un seul endroit</h3>
-            <div className="hero-buttons">
+            <h1 className="hero-title pop-up-element">Bienvenue chez HealthHub</h1>
+            <h3 className="hero-subtitle pop-up-element">Réservez, consultez, suivez votre santé en un seul endroit</h3>
+            <div className="hero-buttons pop-up-element">
                 <button className="hero-button" onClick={handleLoginPage}>Se connecter</button>
                 <button className="hero-button-secondary" onClick={()=>{moveToSection("contact")}}>En savoir plus</button>       
             </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
 import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import axios from 'axios';
 function Signup() {
     const [showPassword, setShowPassword] = useState(false);
@@ -42,9 +43,29 @@ function Signup() {
         }
     };
 
+    useEffect(()=>{
+        const signupAnimation = document.querySelectorAll('.fade-in-element');
+        const signupObserver = new IntersectionObserver((entities)=>{
+            entities.forEach(entry =>{
+            if (entry.isIntersecting){
+                entry.target.classList.add('fade-in');
+            }
+            });
+        },{ threshold: 0.1 });
+    
+            signupAnimation.forEach(element=>{
+            signupObserver.observe(element);
+            });
+    
+        return ()=>{
+            signupAnimation.forEach(element => signupObserver.unobserve(element));
+        };
+    
+      }, []);
+
     return (
         <div className="signup-page">
-            <div className="signup-container">
+            <div className="signup-container fade-in-element">
                 {/* Left Side - Form */}
                 <div className="signup-form-section">
                     <div className="signup-header">
