@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import axios from 'axios';
+import api from "../api/axios";
 function Signup() {
     const [showPassword, setShowPassword] = useState(false);
 
@@ -32,7 +32,7 @@ function Signup() {
     const handleSubmit = async(e) => {
         e.preventDefault();
         try{
-            const response = await axios.post('http://localhost:8080/api/auth/register', formData);
+            const response = await api.post('/auth/register', formData);
             console.log('Données du formulaire soumises:', formData);
 
             

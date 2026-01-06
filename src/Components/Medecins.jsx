@@ -1,5 +1,5 @@
 import { useState,useEffect } from "react";
-import axios from "axios";
+import api from "../api/axios";
 import { TbPlayerTrackNextFilled, TbPlayerTrackPrevFilled } from "react-icons/tb";
 function Medecins({getAuthHeaders}) {
   const [medecins, setMedecins] = useState([]);
@@ -10,7 +10,7 @@ function Medecins({getAuthHeaders}) {
         const fetchMedecins = async () => {
             const headers = getAuthHeaders();
             try{
-                const medecinsRes = await axios.get("http://localhost:8080/api/patients/medecins", { headers });
+                const medecinsRes = await api.get("/patients/medecins", { headers });
                 setMedecins(medecinsRes.data);
                 setLoading(false);
                 console.log(medecinsRes.data);

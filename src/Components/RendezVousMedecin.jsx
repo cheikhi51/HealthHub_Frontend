@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { IoSearchSharp } from "react-icons/io5";
 import { MdCheck } from "react-icons/md";
 import { TbPlayerTrackNextFilled } from "react-icons/tb";
@@ -44,7 +44,7 @@ function RendezVousMedecin({getAuthHeaders, fetchStats,userId}) {
     setError(null);
     try {
       const headers = getAuthHeaders();
-      const rendezVousRes = await axios.get(`http://localhost:8080/api/medecins/${userId}/rendez-vous`, { headers });
+      const rendezVousRes = await api.get(`/medecins/${userId}/rendez-vous`, { headers });
       setRendezVous(rendezVousRes.data);
     } catch (err) {
       console.error("Erreur lors du chargement des rendez vous : ", err);
@@ -62,7 +62,7 @@ function RendezVousMedecin({getAuthHeaders, fetchStats,userId}) {
   const validerRendezvous = async (id) => {
     try {
       const headers = getAuthHeaders();
-      await axios.put(`http://localhost:8080/api/medecins/${userId}/rendez-vous/${id}/valider`, {rendezVous},{ headers });
+      await api.put(`/medecins/${userId}/rendez-vous/${id}/valider`, {rendezVous},{ headers });
       fetchRendezVous();
       fetchStats();
     } catch (err) {
@@ -74,7 +74,7 @@ function RendezVousMedecin({getAuthHeaders, fetchStats,userId}) {
   const refuserRendezvous = async (id) => {
     try {
       const headers = getAuthHeaders();
-      await axios.put(`http://localhost:8080/api/medecins/${userId}/rendez-vous/${id}/refuser`, {rendezVous},{ headers });
+      await api.put(`/medecins/${userId}/rendez-vous/${id}/refuser`, {rendezVous},{ headers });
       fetchRendezVous();
       fetchStats();
     } catch (err) {
@@ -86,7 +86,7 @@ function RendezVousMedecin({getAuthHeaders, fetchStats,userId}) {
   const completerRendezvous = async (id) => {
     try {
       const headers = getAuthHeaders();
-      await axios.put(`http://localhost:8080/api/medecins/${userId}/rendez-vous/${id}/completer`,{rendezVous}, { headers });
+      await api.put(`/medecins/${userId}/rendez-vous/${id}/completer`,{rendezVous}, { headers });
       fetchRendezVous();
       fetchStats();
     } catch (err) {
@@ -98,7 +98,7 @@ function RendezVousMedecin({getAuthHeaders, fetchStats,userId}) {
   const handleStatusChange = async (id, newStatus) => {
     try {
       const headers = getAuthHeaders();
-      await axios.put(`http://localhost:8080/api/administrateurs/rendez-vous/${id}/statut`, 
+      await api.put(`/administrateurs/rendez-vous/${id}/statut`, 
         { statut: newStatus }, 
         { headers }
       );

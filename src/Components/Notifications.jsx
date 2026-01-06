@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { 
   IoCheckmarkDone, 
   IoCheckmark, 
@@ -34,7 +34,7 @@ function Notifications({ getAuthHeaders, fetchStats, userId }) {
     setError(null);
     try {
       const headers = getAuthHeaders();
-      const response = await axios.get(`http://localhost:8080/api/patients/${userId}/notifications`, { headers });
+      const response = await api.get(`/patients/${userId}/notifications`, { headers });
       setNotifications(response.data);
     } catch (err) {
       console.error("Erreur lors du chargement des notifications:", err);
@@ -47,7 +47,7 @@ function Notifications({ getAuthHeaders, fetchStats, userId }) {
   const markAsRead = async (notificationId) => {
     try {
       const headers = getAuthHeaders();
-      await axios.put(`http://localhost:8080/api/patients/${userId}/notifications/${notificationId}/lire`, {}, { headers });
+      await api.put(`/patients/${userId}/notifications/${notificationId}/lire`, {}, { headers });
       
       setNotifications(prev => prev.map(notif => 
         notif.id === notificationId 
@@ -64,7 +64,7 @@ function Notifications({ getAuthHeaders, fetchStats, userId }) {
   const markAllAsRead = async () => {
     try {
       const headers = getAuthHeaders();
-      await axios.put("http://localhost:8080/api/patients/notifications/read-all", {}, { headers });
+      await api.put("/patients/notifications/read-all", {}, { headers });
       
       setNotifications(prev => prev.map(notif => ({
         ...notif, 
@@ -81,7 +81,7 @@ function Notifications({ getAuthHeaders, fetchStats, userId }) {
   const deleteNotification = async (notificationId) => {
     try {
       const headers = getAuthHeaders();
-      await axios.delete(`http://localhost:8080/api/patients/${userId}/notifications/${notificationId}`, { headers });
+      await api.delete(`/patients/${userId}/notifications/${notificationId}`, { headers });
       
       setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
       setSelectedNotifications(prev => prev.filter(id => id !== notificationId));
@@ -96,7 +96,7 @@ function Notifications({ getAuthHeaders, fetchStats, userId }) {
       const headers = getAuthHeaders();
       await Promise.all(
         selectedNotifications.map(id => 
-          axios.delete(`http://localhost:8080/api/patients/${userId}/notifications/${id}`, { headers })
+          api.delete(`/patients/${userId}/notifications/${id}`, { headers })
         )
       );
       

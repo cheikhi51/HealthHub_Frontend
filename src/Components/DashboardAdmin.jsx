@@ -11,7 +11,7 @@ import AdminSidebar from "./AdminSidebar";
 import HistoriqueAdmin from "./HistoriqueAdmin";
 import RendezVousChart from "./RendezVousChart";
 import UserBarChart from "./UsersBarChart";
-import axios from "axios";
+import api from "../api/axios";
 function DashboardAdmin({ setAuthToken }) {
   const [showLogout, setShowLogout] = useState(false);
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -54,9 +54,9 @@ function DashboardAdmin({ setAuthToken }) {
       setError(null);
       try {
         const headers = getAuthHeaders();
-        const utilisateursRes = await axios.get("http://localhost:8080/api/utilisateurs", { headers });
-        const rendezVousRes = await axios.get("http://localhost:8080/api/administrateurs/rendez-vous", { headers });
-        const statistiqueRes = await axios.get("http://localhost:8080/api/administrateurs/statistiques", { headers });
+        const utilisateursRes = await api.get("/utilisateurs", { headers });
+        const rendezVousRes = await api.get("/administrateurs/rendez-vous", { headers });
+        const statistiqueRes = await api.get("/administrateurs/statistiques", { headers });
         setStatistiques({
           nombreTotalUtilisateurs: statistiqueRes.data.nombreTotalUtilisateurs,
           nombreTotalPatients: statistiqueRes.data.nombreTotalPatients,
@@ -80,7 +80,7 @@ function DashboardAdmin({ setAuthToken }) {
   const fetchCurrentUser = async () => {
     try {
       const headers = getAuthHeaders();
-      const res = await axios.get("http://localhost:8080/api/me", { headers });
+      const res = await api.get("/me", { headers });
       setCurrentUser(res.data); 
     } catch (err) {
       console.error("Erreur lors de la récupération de l'utilisateur:", err);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api/axios";
 import { TbPlayerTrackPrevFilled, TbPlayerTrackNextFilled } from "react-icons/tb";
 import { FaTrash } from "react-icons/fa";
 import { IoSearchSharp } from "react-icons/io5";
@@ -63,7 +63,7 @@ function HistoriqueAdmin({ getAuthHeaders, userId }) {
         setLoading(true);
         try {
             const headers = getAuthHeaders();
-            const res = await axios.get("http://localhost:8080/api/historiques", { headers });
+            const res = await api.get("/historiques", { headers });
             setHistoriques(res.data); 
         } catch (err) {
             console.error("Erreur lors de la récupération de l'historique:", err);
@@ -77,9 +77,9 @@ function HistoriqueAdmin({ getAuthHeaders, userId }) {
         try {
             const headers = getAuthHeaders();
             const [utilisateurHistRes, historiqueCountByUseRes, recentRes] = await Promise.all([
-                axios.get(`http://localhost:8080/api/historiques/utilisateur/${userId}`, { headers }),
-                axios.get(`http://localhost:8080/api/historiques/utilisateur/${userId}/count`, { headers }),
-                axios.get(`http://localhost:8080/api/historiques/utilisateur/${userId}/recent`, { headers })
+                api.get(`/historiques/utilisateur/${userId}`, { headers }),
+                api.get(`/historiques/utilisateur/${userId}/count`, { headers }),
+                api.get(`/historiques/utilisateur/${userId}/recent`, { headers })
             ]);
             
             setHistoriqueCountByUser(historiqueCountByUseRes.data);
@@ -103,7 +103,7 @@ function HistoriqueAdmin({ getAuthHeaders, userId }) {
     const handleDeleteHistorique = async (histId) => {
         try{
             const headers = getAuthHeaders();
-            await axios.delete(`http://localhost:8080/api/historiques/${histId}`, { headers });
+            await api.delete(`/historiques/${histId}`, { headers });
             fetchHistorque();
         } catch (err) {
             console.error("Erreur lors de la suppression de l'historique:", err);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { IoSearchSharp } from "react-icons/io5";
 
 import { TbPlayerTrackNextFilled } from "react-icons/tb";
@@ -44,7 +44,7 @@ function Patient({ getAuthHeaders, fetchStats ,userId}) {
     setError(null);
     try {
       const headers = getAuthHeaders();
-      const patientsRes = await axios.get(`http://localhost:8080/api/medecins/${userId}/patients`, { headers });
+      const patientsRes = await api.get(`/medecins/${userId}/patients`, { headers });
       setPatient(patientsRes.data);
     } catch (err) {
       console.error("Erreur lors du chargement des patients:", err);

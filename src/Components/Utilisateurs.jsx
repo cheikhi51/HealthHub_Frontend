@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from  '../api/axios';
 import { IoSearchSharp } from "react-icons/io5";
 import { MdPublishedWithChanges, MdDelete, MdCancel, MdCreateNewFolder } from "react-icons/md";
 import { FaRegCheckCircle } from "react-icons/fa";
@@ -41,7 +41,7 @@ function Utilisateurs({ getAuthHeaders, fetchStats }) {
     setError(null);
     try {
       const headers = getAuthHeaders();
-      const usersRes = await axios.get("http://localhost:8080/api/utilisateurs", { headers });
+      const usersRes = await api.get("/utilisateurs", { headers });
       setUsers(usersRes.data);
     } catch (err) {
       console.error("Erreur lors du chargement des utilisateurs:", err);
@@ -59,7 +59,7 @@ function Utilisateurs({ getAuthHeaders, fetchStats }) {
   const handleDelete = async (id) => {
     try {
       const headers = getAuthHeaders();
-      await axios.delete(`http://localhost:8080/api/utilisateurs/${id}`, { headers });
+      await api.delete(`/utilisateurs/${id}`, { headers });
       fetchUsers();
       fetchStats();
     } catch (err) {
@@ -71,7 +71,7 @@ function Utilisateurs({ getAuthHeaders, fetchStats }) {
   const handleUpdate = async () => {
     try {
       const headers = getAuthHeaders();
-      await axios.put(`http://localhost:8080/api/utilisateurs/${editingUser.id}`, editingUser, { headers });
+      await api.put(`/utilisateurs/${editingUser.id}`, editingUser, { headers });
       setEditingUser(null);
       fetchUsers();
       fetchStats();
@@ -84,7 +84,7 @@ function Utilisateurs({ getAuthHeaders, fetchStats }) {
   const handleCreate = async () => {
     try {
       const headers = getAuthHeaders();
-      await axios.post("http://localhost:8080/api/utilisateurs", newUser, { headers });
+      await api.post("/utilisateurs", newUser, { headers });
       setNewUser({ nom: "", email: "", mot_de_passe: "", role: "" });
       fetchUsers();
       fetchStats();

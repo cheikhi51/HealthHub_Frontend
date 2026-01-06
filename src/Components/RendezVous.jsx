@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { IoSearchSharp } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { TbPlayerTrackNextFilled } from "react-icons/tb";
@@ -44,7 +44,7 @@ function RendezVous({ getAuthHeaders, fetchStats }) {
     setError(null);
     try {
       const headers = getAuthHeaders();
-      const rendezVousRes = await axios.get("http://localhost:8080/api/administrateurs/rendez-vous", { headers });
+      const rendezVousRes = await api.get("/administrateurs/rendez-vous", { headers });
       setRendezVous(rendezVousRes.data);
     } catch (err) {
       console.error("Erreur lors du chargement des rendez vous : ", err);
@@ -62,7 +62,7 @@ function RendezVous({ getAuthHeaders, fetchStats }) {
   const handleDelete = async (id) => {
     try {
       const headers = getAuthHeaders();
-      await axios.delete(`http://localhost:8080/api/administrateurs/rendez-vous/${id}`, { headers });
+      await api.delete(`/administrateurs/rendez-vous/${id}`, { headers });
       fetchRendezVous();
       fetchStats();
     } catch (err) {
@@ -74,7 +74,7 @@ function RendezVous({ getAuthHeaders, fetchStats }) {
   const handleStatusChange = async (id, newStatus) => {
     try {
       const headers = getAuthHeaders();
-      await axios.put(`http://localhost:8080/api/administrateurs/rendez-vous/${id}/statut`, 
+      await api.put(`/administrateurs/rendez-vous/${id}/statut`, 
         { statut: newStatus }, 
         { headers }
       );

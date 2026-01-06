@@ -306,7 +306,7 @@ body {
         rgba(0, 0, 0, 0.4),      /* Dégradé */
         rgba(0, 0, 0, 0.2)       /* Transparent à droite */
     ),
-    url('healthhub_home_image.jpeg');
+    url('/healthhub_home_image.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

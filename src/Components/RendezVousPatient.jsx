@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { IoSearchSharp } from "react-icons/io5";
 import { MdCreateNewFolder, MdDelete } from "react-icons/md";
 import { TbPlayerTrackNextFilled } from "react-icons/tb";
@@ -48,8 +48,8 @@ function RendezVousPatient ({getAuthHeaders,fetchStats,userId}) {
     setError(null);
     try {
       const headers = getAuthHeaders();
-      const rendezVousRes = await axios.get(`http://localhost:8080/api/patients/${userId}/rendez-vous`, { headers });
-      const specialitesRes = await axios.get("http://localhost:8080/api/patients/specialites" , {headers});
+      const rendezVousRes = await api.get(`/patients/${userId}/rendez-vous`, { headers });
+      const specialitesRes = await api.get("/patients/specialites" , {headers});
       setRendezVous(rendezVousRes.data);
       setSpecialites(specialitesRes.data);
     } catch (err) {
@@ -68,7 +68,7 @@ function RendezVousPatient ({getAuthHeaders,fetchStats,userId}) {
   const handleDelete = async (id) => {
     try {
       const headers = getAuthHeaders();
-      await axios.delete(`http://localhost:8080/api/patients/${userId}/rendez-vous/${id}`, { headers });
+      await api.delete(`/patients/${userId}/rendez-vous/${id}`, { headers });
       fetchRendezVous();
       fetchStats();
     } catch (err) {
@@ -104,8 +104,8 @@ function RendezVousPatient ({getAuthHeaders,fetchStats,userId}) {
     console.log("Données envoyées:", rendezVousData);
     console.log("Exemple de date formatée:", rendezVousData.dateDebut); // Doit être "2025-12-06T03:22:00Z"
 
-    const response = await axios.post(
-      "http://localhost:8080/api/patients/rendez-vous/par-specialite",
+    const response = await api.post(
+      "/patients/rendez-vous/par-specialite",
       rendezVousData,
       { headers }
     );
@@ -141,7 +141,7 @@ function RendezVousPatient ({getAuthHeaders,fetchStats,userId}) {
   const handleStatusChange = async (id, newStatus) => {
     try {
       const headers = getAuthHeaders();
-      await axios.put(`http://localhost:8080/api/administrateurs/rendez-vous/${id}/statut`, 
+      await api.put(`/administrateurs/rendez-vous/${id}/statut`, 
         { statut: newStatus }, 
         { headers }
       );

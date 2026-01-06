@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api/axios";
 import { FaFilter, FaTrash } from "react-icons/fa";
 import { IoSearchSharp } from "react-icons/io5";
 import { TbPlayerTrackPrevFilled, TbPlayerTrackNextFilled } from "react-icons/tb";
@@ -61,8 +61,8 @@ function HistoriqueUtilisateur({ getAuthHeaders, userId }) {
         try {
             const headers = getAuthHeaders();
             const [utilisateurHistRes, historiqueCountByUseRes] = await Promise.all([
-                axios.get(`http://localhost:8080/api/historiques/utilisateur/${userId}`, { headers }),
-                axios.get(`http://localhost:8080/api/historiques/utilisateur/${userId}/count`, { headers })
+                api.get(`/historiques/utilisateur/${userId}`, { headers }),
+                api.get(`/historiques/utilisateur/${userId}/count`, { headers })
             ]);
             
             setHistoriques(utilisateurHistRes.data);
@@ -78,7 +78,7 @@ function HistoriqueUtilisateur({ getAuthHeaders, userId }) {
     const handleDeleteHistorique = async (historiqueId) => {
         try {
             const headers = getAuthHeaders();
-            await axios.delete(`http://localhost:8080/api/historiques/${historiqueId}`, { headers });
+            await api.delete(`/historiques/${historiqueId}`, { headers });
             
             // Retirer l'historique de la liste locale
             setHistoriques(historiques.filter(h => h.id !== historiqueId));

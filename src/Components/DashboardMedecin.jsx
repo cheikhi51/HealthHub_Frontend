@@ -8,7 +8,7 @@ import StatistiquesMedecin from "./StatistiqueMedecin";
 import Chatbot from "./Chatbot";
 import SidebarMedecin from "./SidebarMedecin ";
 import HistoriqueUtilisateur from "./HistoriqueUtilisateur";
-import axios from "axios";
+import api from "../api/axios";
 import Patient from "./Patient";
 function DashboardMedecin({ setAuthToken }) {
   const [showLogout, setShowLogout] = useState(false);
@@ -51,7 +51,7 @@ function DashboardMedecin({ setAuthToken }) {
       setError(null);
       try {
         const headers = getAuthHeaders();
-        const statistiqueRes = await axios.get(`http://localhost:8080/api/medecins/${currentUser.id}/statistiques`, { headers });
+        const statistiqueRes = await api.get(`/medecins/${currentUser.id}/statistiques`, { headers });
         setStatistiques({
           nombreTotalRendezVous: statistiqueRes.data.nombreTotalRendezVous,
           nombreRendezVousEnAttente: statistiqueRes.data.nombreRendezVousEnAttente,
@@ -72,7 +72,7 @@ function DashboardMedecin({ setAuthToken }) {
   const fetchCurrentUser = async () => {
     try {
       const headers = getAuthHeaders();
-      const res = await axios.get("http://localhost:8080/api/me", { headers });
+      const res = await api.get("/me", { headers });
       setCurrentUser(res.data); 
     } catch (err) {
       console.error("Erreur lors de la récupération de l'utilisateur:", err);

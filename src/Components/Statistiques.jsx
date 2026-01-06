@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { 
   FaUsers, 
   FaUserMd, 
@@ -30,15 +30,15 @@ function Statistiques({ getAuthHeaders }) {
       const headers = getAuthHeaders();
       
       // Récupérer les statistiques globales
-      const statsGlobalesRes = await axios.get(
-        "http://localhost:8080/api/administrateurs/statistiques",
+      const statsGlobalesRes = await api.get(
+        "/administrateurs/statistiques",
         { headers }
       );
       setStatsGlobales(statsGlobalesRes.data);
 
       // Récupérer les statistiques des rendez-vous
-      const statsRdvRes = await axios.get(
-        "http://localhost:8080/api/administrateurs/statistiques/rendez-vous",
+      const statsRdvRes = await api.get(
+        "/administrateurs/statistiques/rendez-vous",
         { headers }
       );
       setStatsRendezVous(statsRdvRes.data);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { 
   FaUsers, 
   FaUserMd, 
@@ -30,8 +30,8 @@ function StatistiquesMedecin({ getAuthHeaders ,userId}) {
       const headers = getAuthHeaders();
       
       // Récupérer les statistiques globales
-      const statsGlobalesRes = await axios.get(
-        `http://localhost:8080/api/medecins/${userId}/statistiques`,
+      const statsGlobalesRes = await api.get(
+        `/medecins/${userId}/statistiques`,
         { headers }
       );
       setStatsGlobales(statsGlobalesRes.data);

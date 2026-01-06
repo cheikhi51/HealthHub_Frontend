@@ -5,7 +5,7 @@ import { TbLogout } from "react-icons/tb";
 import { useState } from "react";
 import Notifications from "./Notifications";
 import Chatbot from "./Chatbot";
-import axios from "axios";
+import api from "../api/axios";
 import SidebarPatient from "./SidebarPatient";
 import RendezVousPatient from "./RendezVousPatient";
 import HistoriqueUtilisateur from "./HistoriqueUtilisateur";
@@ -41,7 +41,7 @@ function DashboardPatient({ setAuthToken }) {
   const fetchCurrentUser = async () => {
     try {
       const headers = getAuthHeaders();
-      const res = await axios.get("http://localhost:8080/api/me", { headers });
+      const res = await api.get("/me", { headers });
       setCurrentUser(res.data); 
     } catch (err) {
       console.error("Erreur lors de la récupération de l'utilisateur:", err);
@@ -63,10 +63,10 @@ function DashboardPatient({ setAuthToken }) {
       setError(null);
       try {
         const headers = getAuthHeaders();
-        const notificationsRes = await axios.get(`http://localhost:8080/api/patients/${currentUser.id}/notifications`, { headers });
-        const rendezVousRes = await axios.get(`http://localhost:8080/api/patients/${currentUser.id}/rendez-vous`, { headers });
-        const medecinsRes = await axios.get("http://localhost:8080/api/patients/medecins", { headers });
-        const specialistesRes = await axios.get("http://localhost:8080/api/patients/specialites", { headers });
+        const notificationsRes = await api.get(`/patients/${currentUser.id}/notifications`, { headers });
+        const rendezVousRes = await api.get(`/patients/${currentUser.id}/rendez-vous`, { headers });
+        const medecinsRes = await api.get("/patients/medecins", { headers });
+        const specialistesRes = await api.get("/patients/specialites", { headers });
         setStatistiques({
           nombreTotalNotifications: notificationsRes.data.length,
           nombreTotalRendezVous : rendezVousRes.data.length,

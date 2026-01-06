@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
-import axios from 'axios';
+import api from "../api/axios";
 function Login({setAuthToken}) {
     const [formData, setFormData] = useState({
         email: '',
@@ -25,7 +25,7 @@ function Login({setAuthToken}) {
         e.preventDefault();
         // Handle login logic here
         try {
-            const response = await axios.post('http://localhost:8080/api/auth/login', formData);
+            const response = await api.post('/auth/login', formData);
             localStorage.setItem('jwtToken', response.data.token);
             setAuthToken(response.data.token);
             const role = response.data.role;
