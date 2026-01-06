@@ -32,19 +32,16 @@ function Patient({ getAuthHeaders, fetchStats ,userId}) {
 
   useEffect(() => {
     if (userId) {
-      fetchStats();
-      fetchPatients(userId);
+      fetchPatients();
     }
-  
-    
   }, [userId]);
 
-  const fetchPatients = async (medecinId) => {
+  const fetchPatients = async () => {
     setLoading(true);
     setError(null);
     try {
       const headers = getAuthHeaders();
-      const patientsRes = await api.get(`/medecins/${medecinId}/patients`, { headers });
+      const patientsRes = await api.get(`/medecins/${userId}/patients`, { headers });
       setPatient(patientsRes.data);
     } catch (err) {
       console.error("Erreur lors du chargement des patients:", err);
