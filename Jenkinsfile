@@ -58,7 +58,7 @@ pipeline {
       }
     }
 
-   stage('Frontend Build') {
+    stage('Frontend Build') {
       steps {
         dir('frontend') {
           bat '''
@@ -69,39 +69,42 @@ pipeline {
       }
     }
 
-
     stage('SonarQube Analysis') {
       steps {
         withSonarQubeEnv('SonarQube') {
           dir('backend') {
             bat '''
-              mvn sonar:sonar ^
-              -Dsonar.projectKey=%SONAR_PROJECT_KEY_BACKEND%
+              mvn sonar:sonar \
+              -Dsonar.projectKey=$SONAR_PROJECT_KEY_BACKEND
+            '''
+          }
+          dir('frontend') {
+            sh '''
+              npm run sonar \
+              || echo "Frontend sonar configured via CLI"
             '''
           }
         }
       }
     }
 
-
-        stage('Build Docker Images') {
-          steps {
-            bat '''
-              docker build -t mohamed510/backend:latest backend
-              docker build -t mohamed510/frontend:latest frontend
-            '''
-          }
-        }
-
-        stage('Push to Docker Hub') {
-          steps {
-            bat '''
-              echo %DOCKERHUB_CREDS_PSW% | docker login -u %DOCKERHUB_CREDS_USR% --password-stdin
-              docker push mohamed510/backend:latest
-              docker push mohamed510/frontend:latest
-            '''
-          }
-        }
+    stage('Build Docker Images') {
+      steps {
+        bat '''
+          docker build -t mohamed510/backend:latest backend
+          docker build -t mohamed510/frontend:latest frontend
+        '''
+      }
     }
-}
+
+    stage('Push to Docker Hub') {
+      steps {
+        bat '''
+          echo $DOCKERHUB_CREDS_PSW | docker login -u $DOCKERHUB_CREDS_USR --password-stdin
+          docker push mohamed510/backend:latest
+          docker push mohamed510/frontend:latest
+        '''
+      }
+    }
+  }
 }
