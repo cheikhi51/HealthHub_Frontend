@@ -33,15 +33,35 @@ pipeline {
     stage('Backend Build & Test') {
       steps {
         dir('backend') {
-          sh 'mvn clean test'
+          script {
+            withCredentials([
+            string(credentialsId: 'postgres-db-url', variable: 'DB_URL'),
+            string(credentialsId: 'jwt-secret', variable: 'JWT_SECRET'),
+            string(credentialsId: 'jwt-expiration', variable: 'JWT_EXPIRATION'),
+            usernamePassword(
+                credentialsId: 'postgres-db-credentials',
+                usernameVariable: 'DB_USERNAME',
+                passwordVariable: 'DB_PASSWORD'
+            )
+        ]) {
+            bat """
+                set DB_DRIVER_CLASS_NAME=org.postgresql.Driver
+                set DB_URL=%DB_URL%
+                set DB_USERNAME=%DB_USERNAME%
+                set DB_PASSWORD=%DB_PASSWORD%
+                set JWT_SECRET=%JWT_SECRET%
+                set JWT_EXPIRATION=%JWT_EXPIRATION%
+                mvn clean compile
+            """
+        }
         }
       }
     }
 
-    stage('Frontend Build') {
+   stage('Frontend Build') {
       steps {
         dir('frontend') {
-          sh '''
+          bat '''
             npm install
             npm run build
           '''
@@ -49,28 +69,24 @@ pipeline {
       }
     }
 
+
     stage('SonarQube Analysis') {
       steps {
         withSonarQubeEnv('SonarQube') {
           dir('backend') {
-            sh '''
-              mvn sonar:sonar \
-              -Dsonar.projectKey=$SONAR_PROJECT_KEY_BACKEND
-            '''
-          }
-          dir('frontend') {
-            sh '''
-              npm run sonar \
-              || echo "Frontend sonar configured via CLI"
+            bat '''
+              mvn sonar:sonar ^
+              -Dsonar.projectKey=%SONAR_PROJECT_KEY_BACKEND%
             '''
           }
         }
       }
     }
 
-    stage('Build Docker Images') {
+
+        stage('Build Docker Images') {
       steps {
-        sh '''
+        bat '''
           docker build -t mohamed510/backend:latest backend
           docker build -t mohamed510/frontend:latest frontend
         '''
@@ -79,12 +95,13 @@ pipeline {
 
     stage('Push to Docker Hub') {
       steps {
-        sh '''
-          echo $DOCKERHUB_CREDS_PSW | docker login -u $DOCKERHUB_CREDS_USR --password-stdin
+        bat '''
+          echo %DOCKERHUB_CREDS_PSW% | docker login -u %DOCKERHUB_CREDS_USR% --password-stdin
           docker push mohamed510/backend:latest
           docker push mohamed510/frontend:latest
         '''
       }
     }
+
   }
 }
