@@ -33,27 +33,26 @@ pipeline {
     stage('Backend Build & Test') {
       steps {
         dir('backend') {
-          script {
-            withCredentials([
+          withCredentials([
             string(credentialsId: 'postgres-db-url', variable: 'DB_URL'),
             string(credentialsId: 'jwt-secret', variable: 'JWT_SECRET'),
             string(credentialsId: 'jwt-expiration', variable: 'JWT_EXPIRATION'),
             usernamePassword(
-                credentialsId: 'postgres-db-credentials',
-                usernameVariable: 'DB_USERNAME',
-                passwordVariable: 'DB_PASSWORD'
+              credentialsId: 'postgres-db-credentials',
+              usernameVariable: 'DB_USERNAME',
+              passwordVariable: 'DB_PASSWORD'
             )
-        ]) {
-            bat """
-                set DB_DRIVER_CLASS_NAME=org.postgresql.Driver
-                set DB_URL=%DB_URL%
-                set DB_USERNAME=%DB_USERNAME%
-                set DB_PASSWORD=%DB_PASSWORD%
-                set JWT_SECRET=%JWT_SECRET%
-                set JWT_EXPIRATION=%JWT_EXPIRATION%
-                mvn clean compile
-            """
-        }
+          ]) {
+            bat '''
+              set DB_DRIVER_CLASS_NAME=org.postgresql.Driver
+              set DB_URL=%DB_URL%
+              set DB_USERNAME=%DB_USERNAME%
+              set DB_PASSWORD=%DB_PASSWORD%
+              set JWT_SECRET=%JWT_SECRET%
+              set JWT_EXPIRATION=%JWT_EXPIRATION%
+              mvn clean compile
+            '''
+          }
         }
       }
     }
@@ -74,14 +73,8 @@ pipeline {
         withSonarQubeEnv('SonarQube') {
           dir('backend') {
             bat '''
-              mvn sonar:sonar \
-              -Dsonar.projectKey=$SONAR_PROJECT_KEY_BACKEND
-            '''
-          }
-          dir('frontend') {
-            sh '''
-              npm run sonar \
-              || echo "Frontend sonar configured via CLI"
+              mvn sonar:sonar ^
+              -Dsonar.projectKey=%SONAR_PROJECT_KEY_BACKEND%
             '''
           }
         }
@@ -100,7 +93,7 @@ pipeline {
     stage('Push to Docker Hub') {
       steps {
         bat '''
-          echo $DOCKERHUB_CREDS_PSW | docker login -u $DOCKERHUB_CREDS_USR --password-stdin
+          echo %DOCKERHUB_CREDS_PSW% | docker login -u %DOCKERHUB_CREDS_USR% --password-stdin
           docker push mohamed510/backend:latest
           docker push mohamed510/frontend:latest
         '''
