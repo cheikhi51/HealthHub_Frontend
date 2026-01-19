@@ -85,23 +85,23 @@ pipeline {
 
 
         stage('Build Docker Images') {
-      steps {
-        bat '''
-          docker build -t mohamed510/backend:latest backend
-          docker build -t mohamed510/frontend:latest frontend
-        '''
-      }
-    }
+          steps {
+            bat '''
+              docker build -t mohamed510/backend:latest backend
+              docker build -t mohamed510/frontend:latest frontend
+            '''
+          }
+        }
 
-    stage('Push to Docker Hub') {
-      steps {
-        bat '''
-          echo %DOCKERHUB_CREDS_PSW% | docker login -u %DOCKERHUB_CREDS_USR% --password-stdin
-          docker push mohamed510/backend:latest
-          docker push mohamed510/frontend:latest
-        '''
-      }
-    }
+        stage('Push to Docker Hub') {
+          steps {
+            bat '''
+              echo %DOCKERHUB_CREDS_PSW% | docker login -u %DOCKERHUB_CREDS_USR% --password-stdin
+              docker push mohamed510/backend:latest
+              docker push mohamed510/frontend:latest
+            '''
+          }
+        }
 
-  }
+}
 }
