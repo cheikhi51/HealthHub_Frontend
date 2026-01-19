@@ -102,14 +102,20 @@ pipeline {
 
     stage('Deploy to Minikube') {
       steps {
-        bat '''
-          kubectl config use-context minikube
-          kubectl apply -f Healthhub-k8s/
-          kubectl rollout status deployment/healthhub-backend-deployment
-          kubectl rollout status deployment/healthhub-frontend-deployment
-        '''
+        withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+          bat '''
+            echo Using kubeconfig: %KUBECONFIG%
+            kubectl config get-contexts
+            kubectl config use-context minikube
+
+            kubectl apply -f Healthhub-k8s/
+            kubectl rollout status deployment/healthhub-backend-deployment
+            kubectl rollout status deployment/healthhub-frontend-deployment
+          '''
+        }
       }
     }
+
 
   }
 }
