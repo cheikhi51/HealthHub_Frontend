@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: healthhub-postgres-config
+data:
+  POSTGRES_HOST: healthhub-postgres
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: HealthHub
+  DB_DRIVER_CLASS_NAME: org.postgresql.Driver
+  DB_URL: jdbc:postgresql://healthhub-postgres:5432/HealthHub

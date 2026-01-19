@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: healthhub-frontend-deployment
+  labels:
+    app: healthhub-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: healthhub-frontend
+  template:
+    metadata:
+      labels:
+        app: healthhub-frontend
+    spec:
+      containers:
+        - name: healthhub-frontend
+          image: mohamed510/healthhub-frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          env:
+            - name: VITE_API_URL
+              value: /api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: healthhub-frontend
+spec:
+  type: NodePort
+  selector:
+    app: healthhub-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 31001
