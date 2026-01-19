@@ -104,10 +104,16 @@ pipeline {
       steps {
         withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
           bat '''
+            echo Starting Minikube if not running...
+            minikube status || minikube start
+            
             echo Using kubeconfig: %KUBECONFIG%
             kubectl config get-contexts
             kubectl config use-context minikube
-
+            
+            echo Waiting for cluster to be ready...
+            timeout /t 30
+            
             kubectl apply -f Healthhub-k8s/
             kubectl rollout status deployment/healthhub-backend-deployment
             kubectl rollout status deployment/healthhub-frontend-deployment
