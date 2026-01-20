@@ -102,17 +102,19 @@ pipeline {
 
     stage('Deploy to Minikube') {
       steps {
-        withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-          bat '''
-            echo Using kubeconfig: %KUBECONFIG%
-            kubectl config get-contexts
-            kubectl config use-context minikube
-
-            kubectl apply -f Healthhub-k8s/
-            kubectl rollout status deployment/healthhub-backend-deployment
-            kubectl rollout status deployment/healthhub-frontend-deployment
-          '''
-        }
+        bat '''
+          echo Deploying to Minikube in WSL...
+          wsl bash -c "kubectl config use-context minikube && kubectl apply -f /mnt/c/Users/cheik/HealthHub/healthhub/Healthhub-k8s/"
+          
+          echo Waiting for backend deployment...
+          wsl bash -c "kubectl rollout status deployment/healthhub-backend-deployment --timeout=5m"
+          
+          echo Waiting for frontend deployment...
+          wsl bash -c "kubectl rollout status deployment/healthhub-frontend-deployment --timeout=5m"
+          
+          echo Deployment completed!
+          wsl bash -c "kubectl get pods"
+        '''
       }
     }
 
