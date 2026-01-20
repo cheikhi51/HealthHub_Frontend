@@ -84,8 +84,8 @@ pipeline {
     stage('Build Docker Images') {
       steps {
         bat '''
-          docker build -t mohamed510/backend:latest backend
-          docker build -t mohamed510/frontend:latest frontend
+          docker build -t mohamed510/healthhub-backend:latest backend
+          docker build -t mohamed510/healthhub-frontend:latest frontend
         '''
       }
     }
@@ -94,8 +94,8 @@ pipeline {
       steps {
         bat '''
           echo %DOCKERHUB_CREDS_PSW% | docker login -u %DOCKERHUB_CREDS_USR% --password-stdin
-          docker push mohamed510/backend:latest
-          docker push mohamed510/frontend:latest
+          docker push mohamed510/healthhub-backend:latest
+          docker push mohamed510/healthhub-frontend:latest
         '''
       }
     }
