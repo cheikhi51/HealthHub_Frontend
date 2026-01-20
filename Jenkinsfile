@@ -104,15 +104,16 @@ pipeline {
       steps {
         withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
           bat '''
-            kubectl apply -f Healthhub-k8s/healthhub-frontend-deployment.yaml
-            kubectl apply -f Healthhub-k8s/healthhub-backend-secret.yaml
-            kubectl apply -f Healthhub-k8s/healthhub-backend-deployment.yaml
-            kubectl rollout status deployment/healthhub-backend-deployment
-            kubectl rollout status deployment/healthhub-frontend-deployment
+            kubectl apply -f frontend/Healthhub-k8s/postgres-pvc.yaml || exit /b 1
+            kubectl apply -f frontend/Healthhub-k8s/postgres.yaml || exit /b 1
+            kubectl apply -f frontend/Healthhub-k8s/healthhub-backend-secret.yaml || exit /b 1
+            kubectl apply -f frontend/Healthhub-k8s/healthhub-backend-deployment.yaml || exit /b 1
+            kubectl apply -f frontend/Healthhub-k8s/healthhub-frontend-deployment.yaml || exit /b 1
           '''
         }
       }
     }
+
 
 
   }
