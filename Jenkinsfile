@@ -102,14 +102,16 @@ pipeline {
 
     stage('Deploy to Minikube') {
       steps {
-        withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-          bat '''
-            kubectl apply -f frontend/Healthhub-k8s/postgres-pvc.yaml || exit /b 1
-            kubectl apply -f frontend/Healthhub-k8s/postgres.yaml || exit /b 1
-            kubectl apply -f frontend/Healthhub-k8s/healthhub-backend-secret.yaml || exit /b 1
-            kubectl apply -f frontend/Healthhub-k8s/healthhub-backend-deployment.yaml || exit /b 1
-            kubectl apply -f frontend/Healthhub-k8s/healthhub-frontend-deployment.yaml || exit /b 1
-          '''
+        dir('frontend/Healthhub-k8s') {
+          withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+            bat '''
+              kubectl apply -f postgres-pvc.yaml || exit /b 1
+              kubectl apply -f postgres.yaml || exit /b 1
+              kubectl apply -f healthhub-backend-secret.yaml || exit /b 1
+              kubectl apply -f healthhub-backend-deployment.yaml || exit /b 1
+              kubectl apply -f healthhub-frontend-deployment.yaml || exit /b 1
+            '''
+          }
         }
       }
     }
