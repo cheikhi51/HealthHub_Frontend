@@ -101,59 +101,54 @@ pipeline {
     }
 
     stage('Verify Minikube') {
-      steps {
-        bat '''
-          echo Verifying Minikube cluster...
-          kubectl config use-context minikube
-          kubectl cluster-info
-          kubectl get nodes
-        '''
+    steps {
+      withEnv(['KUBECONFIG=C:\\Program Files\\Jenkins\\Kube\\config']) {
+          bat 'kubectl config use-context minikube'
+          bat 'kubectl get nodes'
+          bat 'kubectl apply -f frontend/Healthhub-k8s/postgres.yaml'
       }
     }
+  }
 
     stage('Deploy to Minikube') {
       steps {
         dir('frontend/Healthhub-k8s') {
-          bat '''
-            echo Current directory:
-            cd
-            
-            echo Listing Kubernetes files:
-            dir
-            
-            echo Deploying to Minikube...
-            kubectl config use-context minikube
-            
-            echo Applying Secrets...
-            kubectl apply -f secret-postgres.yaml
-            kubectl apply -f healthhub-backend-secret.yaml
-            
-            echo Applying ConfigMaps...
-            kubectl apply -f config-postgres.yaml
-            
-            echo Applying PVC...
-            kubectl apply -f postgres-pvc.yaml
-            
-            echo Deploying PostgreSQL...
-            kubectl apply -f postgres.yaml
-            
-            echo Waiting for PostgreSQL to be ready...
-            timeout /t 30
-            
-            echo Deploying Backend...
-            kubectl apply -f healthhub-backend.yaml
-            
-            echo Deploying Frontend...
-            kubectl apply -f healthhub-frontend.yaml
-            
-            echo Waiting for deployments to be ready...
-            kubectl rollout status deployment/healthhub-backend-deployment --timeout=5m
-            kubectl rollout status deployment/healthhub-frontend-deployment --timeout=5m
-            
-            echo Deployment completed successfully!
-            kubectl get pods
-            kubectl get services
-          '''
+          withEnv(['KUBECONFIG=C:\\Program Files\\Jenkins\\Kube\\config']) {
+            bat '''
+              echo Deploying to Minikube...
+              kubectl config use-context minikube
+              
+              echo Applying Secrets...
+              kubectl apply -f secret-postgres.yaml
+              kubectl apply -f healthhub-backend-secret.yaml
+              
+              echo Applying ConfigMaps...
+              kubectl apply -f config-postgres.yaml
+              
+              echo Applying PVC...
+              kubectl apply -f postgres-pvc.yaml
+              
+              echo Deploying PostgreSQL...
+              kubectl apply -f postgres.yaml
+              
+              echo Waiting for PostgreSQL to be ready...
+              timeout /t 30
+              
+              echo Deploying Backend...
+              kubectl apply -f healthhub-backend.yaml
+              
+              echo Deploying Frontend...
+              kubectl apply -f healthhub-frontend.yaml
+              
+              echo Waiting for deployments to be ready...
+              kubectl rollout status deployment/healthhub-backend-deployment --timeout=5m
+              kubectl rollout status deployment/healthhub-frontend-deployment --timeout=5m
+              
+              echo Deployment completed successfully!
+              kubectl get pods
+              kubectl get services
+            '''
+          }
         }
       }
     }
