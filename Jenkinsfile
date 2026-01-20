@@ -100,23 +100,84 @@ pipeline {
       }
     }
 
+    stage('Verify Minikube') {
+      steps {
+        bat '''
+          echo Verifying Minikube cluster...
+          kubectl config use-context minikube
+          kubectl cluster-info
+          kubectl get nodes
+        '''
+      }
+    }
+
     stage('Deploy to Minikube') {
       steps {
         dir('frontend/Healthhub-k8s') {
-          withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-            bat '''
-              kubectl apply -f postgres-pvc.yaml || exit /b 1
-              kubectl apply -f postgres.yaml || exit /b 1
-              kubectl apply -f healthhub-backend-secret.yaml || exit /b 1
-              kubectl apply -f healthhub-backend-deployment.yaml || exit /b 1
-              kubectl apply -f healthhub-frontend-deployment.yaml || exit /b 1
-            '''
-          }
+          bat '''
+            echo Current directory:
+            cd
+            
+            echo Listing Kubernetes files:
+            dir
+            
+            echo Deploying to Minikube...
+            kubectl config use-context minikube
+            
+            echo Applying Secrets...
+            kubectl apply -f secret-postgres.yaml
+            kubectl apply -f healthhub-backend-secret.yaml
+            
+            echo Applying ConfigMaps...
+            kubectl apply -f config-postgres.yaml
+            
+            echo Applying PVC...
+            kubectl apply -f postgres-pvc.yaml
+            
+            echo Deploying PostgreSQL...
+            kubectl apply -f postgres.yaml
+            
+            echo Waiting for PostgreSQL to be ready...
+            timeout /t 30
+            
+            echo Deploying Backend...
+            kubectl apply -f healthhub-backend.yaml
+            
+            echo Deploying Frontend...
+            kubectl apply -f healthhub-frontend.yaml
+            
+            echo Waiting for deployments to be ready...
+            kubectl rollout status deployment/healthhub-backend-deployment --timeout=5m
+            kubectl rollout status deployment/healthhub-frontend-deployment --timeout=5m
+            
+            echo Deployment completed successfully!
+            kubectl get pods
+            kubectl get services
+          '''
         }
       }
     }
 
+  }
 
-
+  post {
+    success {
+      echo '========================================='
+      echo 'Pipeline completed successfully! ✅'
+      echo '========================================='
+      echo 'Access your applications:'
+      echo 'Frontend: kubectl get service healthhub-frontend-service'
+      echo 'Backend: kubectl get service healthhub-backend-service'
+      echo '========================================='
+    }
+    failure {
+      echo '========================================='
+      echo 'Pipeline failed! ❌'
+      echo 'Check the logs above for error details.'
+      echo '========================================='
+    }
+    always {
+      echo 'Cleaning up...'
+    }
   }
 }
