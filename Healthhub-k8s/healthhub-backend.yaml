@@ -19,11 +19,24 @@ spec:
           ports:
             - containerPort: 8080
             - containerPort: 9091
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: healthhub-postgres-config
+                  key: DB_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: healthhub-postgres-secret
+                  key: DB_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: healthhub-postgres-secret
+                  key: DB_PASSWORD
+          # Keep other secrets
           envFrom:
-            - configMapRef:
-                name: healthhub-postgres-config
-            - secretRef:
-                name: healthhub-postgres-secret
             - secretRef:
                 name: healthhub-backend-secret
 
